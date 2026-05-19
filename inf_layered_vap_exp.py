@@ -130,8 +130,8 @@ MELT_obs = dict(
 )
 
 # ---- vapour parameter set ----
-VAP = dict(k0=0.26, k1=0.0, m0=2650  * 1570, m1=2650  * 1570, f0=0.5, f1=0.1,
-           rho_vap0=19664000, rho_vap1=19664000*0.2)
+VAP = dict(k0=0.26, k1=0.0, m0=2650  * 1570, m1=2650  * 1570, f0=0.499, f1=0.0,
+           rho_vap0=1266400000, rho_vap1=15664000*0.2)
 
 VAP_obs = dict(
     k0      = 0.26,            # W/(m·K) — vapour thermal conductivity
@@ -139,9 +139,9 @@ VAP_obs = dict(
     m0      =  2650  * 1570,      # 1010.6 J/(m³·K) — rho_v * Cp_v
     m1      =  2650  * 1570,
     f0      = 0.5,
-    f1      = 0.1,
+    f1      = 0.0,
    # rho_vap0 = 2650 * 1, # 3.621e10 J/m³ — rho_melt * L_v (Gokhale Table 1)414.65414574953286
-    rho_vap0 =  13664000 ,
+    rho_vap0 =  1366400000 ,
     rho_vap1 = 13664000*0.2 ,
 )
 theta_lab = np.array([VAP['rho_vap0'], VAP['rho_vap1'], 100, 40, 0.85*Ly, 0.1*Ly])
@@ -6496,8 +6496,8 @@ def run_inf_lbfgs(mean_round_iters=30, var_round_iters=20, prior=None):
             log_ratio  = np.log(theta1 / theta1_ref)
             nll_p      = 0.5 * np.sum((log_ratio / sigma1) ** 2)
             grad_p     = log_ratio / sigma1 ** 2   # d(nll)/d(log theta)
-            #J         += nll_p
-            #g_log     += grad_p
+         #   J         += nll_p
+         #   g_log     += grad_p
 
         print(f"  [mean] J={J:.4e}  rho_vap0={rho0:.4e} (truth {VAP_obs['rho_vap0']:.2e})"
               f"  f0_v={f0_v:.4f} (truth {VAP_obs['f0']:.4f})  g={g_log}")
@@ -6509,10 +6509,10 @@ def run_inf_lbfgs(mean_round_iters=30, var_round_iters=20, prior=None):
         x0=np.log([VAP_base['rho_vap0'], VAP['f0']]),
         jac=True, method='L-BFGS-B',
         bounds=[
-            (np.log(1e5),   np.log(1e12)),   # rho_vap0
+            (np.log(7e6),   np.log(1e12)),   # rho_vap0
             (np.log(0.01),  np.log(1.0)),    # f0_v
         ],
-        options={'maxiter': mean_round_iters, 'ftol': 1e-10, 'gtol': 2e-4})
+        options={'maxiter': mean_round_iters, 'ftol': 1e-10, 'gtol': 2e-4, 'maxcor':1})
 
     rho_vap0_fixed = float(np.exp(res1.x[0]))
     f0_v_fixed     = float(np.exp(res1.x[1]))
@@ -6619,7 +6619,9 @@ validate_depth_adjoint_fd(dx,dy,U_obs,
     spatial_op_obs, h_obs_hist, kappa_param=kappa_param_init,
     compute_adjoint_grad_kappa_fn=compute_adjoint_grad_kappa_phase_matrixfree_all,
     Lx=Lx,
-    N_KL=N_KL, sigma_d = sigma_d, eps_smooth=eps_smooth)
+    N_KL=N_KL, sigma_d = sigma_d, eps_smooth=eps_smooth,mean_only=True)
+
+
 
 #run_inf()
 

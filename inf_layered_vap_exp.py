@@ -53,7 +53,7 @@ f1 = 0.0
 rhoL = 0
 #rho_vap0 = 1e9    # latent heat of vaporisation (J/m^3); set >0 to activate vapour transition
 #rho_vap1 = 1e7
-T_final = 5.0
+T_final = 3.0
 dt = 0.1
 N_KL = 40 # number of KL terms
 P = N_KL + 1     # total chaos modes (0th = mean, 1...N_KL = KL terms)
@@ -72,22 +72,21 @@ sigma_d = 1e-10
 kappa_param_obs = SigmoidLayeredKappa(
     Ny=Ny,
     Ly=Ly,
-    kappa_surface=40.0,    # short correlation near surface (weathered/fractured)
-    kappa_deep=50.0,       # longer correlation at depth (competent granite)
+    kappa_surface=80.0,    # short correlation near surface (weathered/fractured)
+    kappa_deep=60.0,       # longer correlation at depth (competent granite)
     y_transition=0.75*Ly,   # transition at 60% depth
     width=0.1*Ly,          # transition zone ~10% of domain width
     )
 kappa_param_init = SigmoidLayeredKappa(
     Ny=Ny,
     Ly=Ly,
-    kappa_surface=50.0,    # short correlation near surface (weathered/fractured)
-    kappa_deep=30.0,       # longer correlation at depth (competent granite)
-    y_transition=0.7*Ly,   # transition at 60% depth
+    kappa_surface=100.0,    # short correlation near surface (weathered/fractured)
+    kappa_deep=40.0,       # longer correlation at depth (competent granite)
+    y_transition=0.85*Ly,   # transition at 60% depth
     width=0.1*Ly,          # transition zone ~10% of domain width
     )
-theta_kappa_init = np.array([100.0,60.0, 0.85*Ly,0.1*Ly])
-theta_kappa_obs = np.array([40.0,50.0, 0.75*Ly,0.1*Ly])
-theta_lab = np.array([2e10, 1.0e8, 100,60,0.85*Ly, 0.1*Ly])
+theta_kappa_init = np.array([100.0,40.0, 0.85*Ly,0.1*Ly])
+theta_kappa_obs = np.array([80.0,60.0, 0.75*Ly,0.1*Ly])
 np.random.seed(0)
 #Generate GMRF  and assemble SG matrices
 # Generate the GMRF
@@ -114,7 +113,7 @@ MELT  =  dict(k0=2.0,  k1=0.0, m0=2650 * 1050, m1= 2650 * 1050, f0=1.0, f1=0.0)
 
 SOLID_obs = dict(
     k0  = 2.0,              # W/(m·K) — Gokhale Table 1
-    k1  = 1.0,
+    k1  = 0.0,
     m0  = 2650 * 1050,      # 2.7825e6 J/(m³·K) — rho*Cp solid
     m1  = 2650 * 1050,
     f0  = 1.0,             # 0.75 * 0.83 — transmissivity * absorptivity correction
@@ -122,17 +121,17 @@ SOLID_obs = dict(
 )
 
 MELT_obs = dict(
-    k0  = 3.0,              # W/(m·K) — same as solid in Gokhale Table 1
-    k1  = 1.0,
+    k0  = 2.0,              # W/(m·K) — same as solid in Gokhale Table 1
+    k1  = 0.0,
     m0  = 2650 * 1050,      # 4.1605e6 J/(m³·K) — rho*Cp melt
-    m1  = 2650 * 1500,
+    m1  = 2650 * 1050,
     f0  = 1.0,             # same absorptivity correction as solid
     f1  = 0.0
 )
 
 # ---- vapour parameter set ----
-VAP = dict(k0=1.0, k1=0.0, m0=2650  * 1570, m1=2650  * 1570, f0=0.5, f1=0.0,
-           rho_vap0=2.0e8, rho_vap1=1e8)
+VAP = dict(k0=0.26, k1=0.0, m0=2650  * 1570, m1=2650  * 1570, f0=0.5, f1=0.1,
+           rho_vap0=19664000, rho_vap1=19664000*0.2)
 
 VAP_obs = dict(
     k0      = 0.26,            # W/(m·K) — vapour thermal conductivity
@@ -140,15 +139,17 @@ VAP_obs = dict(
     m0      =  2650  * 1570,      # 1010.6 J/(m³·K) — rho_v * Cp_v
     m1      =  2650  * 1570,
     f0      = 0.5,
-    f1      = 0.0,
+    f1      = 0.1,
    # rho_vap0 = 2650 * 1, # 3.621e10 J/m³ — rho_melt * L_v (Gokhale Table 1)414.65414574953286
-    rho_vap0 =  2e8 ,
-    rho_vap1 = 2.0e8 ,
+    rho_vap0 =  13664000 ,
+    rho_vap1 = 13664000*0.2 ,
 )
+theta_lab = np.array([VAP['rho_vap0'], VAP['rho_vap1'], 100, 40, 0.85*Ly, 0.1*Ly])
+
 # ---- vaporisation phase controls ----
 T_vap_lo    = 354.0          # onset  of vaporisation window
 T_vap_hi    = 554.0          # end    of vaporisation window
-Delta_vap   = 100.0            # smoothing half-width (same role as Delta_melt)
+Delta_vap   = 50.0            # smoothing half-width (same role as Delta_melt)
 T_abl = 550.0
 
 # Mesh
@@ -3194,15 +3195,22 @@ def make_F_SG_core(params, f0, f1, t, sqrt_lam=None, phi=None):
 
     global _F_SG_CORE_CACHE
 
-    # Cache key - use f0, f1 and a hash of relevant params
-    cache_key = (
-        f0, f1,
-        params.get("Nx"), params.get("Ny"),
-        tuple(np.asarray(sqrt_lam).flatten()),
-        id(params.get("eigvecs_grid"))   # <-- add this: identity of the eigvec array
-    )
-    if cache_key in _F_SG_CORE_CACHE:
-        return _F_SG_CORE_CACHE[cache_key]
+    # Skip cache when f0/f1 are JAX tracers (inside jax.grad/jit) or
+    # non-scalar arrays — both are unhashable and will error in future JAX.
+    _cacheable = (not isinstance(f0, jax.core.Tracer)
+                  and not isinstance(f1, jax.core.Tracer)
+                  and np.ndim(f0) == 0
+                  and np.ndim(f1) == 0)
+
+    if _cacheable:
+        cache_key = (
+            float(f0), float(f1),
+            params.get("Nx"), params.get("Ny"),
+            tuple(np.asarray(sqrt_lam).flatten()) if sqrt_lam is not None else None,
+            id(params.get("eigvecs_grid"))
+        )
+        if cache_key in _F_SG_CORE_CACHE:
+            return _F_SG_CORE_CACHE[cache_key]
    
     # ---------------------------------------
     # Unpack params once
@@ -3294,9 +3302,9 @@ def make_F_SG_core(params, f0, f1, t, sqrt_lam=None, phi=None):
 
         return F_SG.reshape(-1)  # (P * num_nodes,)
 
-    # Cache the result
-    _F_SG_CORE_CACHE[cache_key] = F_SG_core
-   
+    if _cacheable:
+        _F_SG_CORE_CACHE[cache_key] = F_SG_core
+
     return F_SG_core
 
 def clear_f_sg_cache():
@@ -4355,6 +4363,21 @@ def forcing_param_grads_jax(Ucoeff_jax, mu_jax, f0, f1,t):
     #clear_f_sg_cache()
     g_f0, g_f1 = jax.grad(scalar_obj, argnums=(0, 1))(f0, f1)
     return g_f0, g_f1
+@jax.jit
+def forcing_param_grads_spatial_jax(Ucoeff_jax, mu_jax, f0_nodal_jax, f1, t):
+    """
+    Returns (g_f0_nodal, g_f1):
+      g_f0_nodal — d(mu^T F)/d(f0_nodal), same shape as f0_nodal_jax (Nx+1, Ny+1)
+      g_f1       — d(mu^T F)/d(f1), scalar
+
+    Uses the full spatial f0_nodal field, matching the forward solve which passes
+    a phase-blended nodal f0 array rather than a scalar mean.
+    """
+    def scalar_obj(f0_loc, f1_loc):
+        F_SG_core = make_F_SG_core(params, f0_loc, f1_loc, t)
+        F_SG = F_SG_core(Ucoeff_jax)
+        return jnp.vdot(mu_jax, F_SG)
+    return jax.grad(scalar_obj, argnums=(0, 1))(f0_nodal_jax, jnp.asarray(f1))
 
 def adjoint_grad_all_phase(
     U_history, Mu_history, solid_prop, melt_prop,
@@ -4520,33 +4543,36 @@ def adjoint_grad_all_phase(
             g["m1_m"] += Sbar * gm1_total
 
         # ------------------------------------------------------------------
-        # Forcing gradients
+        # Forcing gradients — spatially resolved chain rule through f0_nodal
         # ------------------------------------------------------------------
-        f0_eff = (solid_prop["f0"]
-                  + (melt_prop["f0"] - solid_prop["f0"]) * Sbar
-                  + (vap_prop["f0"]  - melt_prop["f0"])  * Vbar)
+        # Reconstruct f0_nodal exactly as the forward does (element → nodal)
+        f0_elem_adj = (solid_prop["f0"]
+                       + (melt_prop["f0"] - solid_prop["f0"]) * S_elem
+                       + (vap_prop["f0"]  - melt_prop["f0"])  * V_elem)
+        f0_nodal_adj = elem_to_node_weights(f0_elem_adj, Nx, Ny).reshape(Nx + 1, Ny + 1)
+        # f1 enters as a uniform scalar multiplier of the KL field — scalar blend is correct
         f1_eff = (solid_prop["f1"]
                   + (melt_prop["f1"] - solid_prop["f1"]) * Sbar
                   + (vap_prop["f1"]  - melt_prop["f1"])  * Vbar)
 
-        dJ_df0_eff, dJ_df1_eff = forcing_param_grads_numpy(
-            u_n, mu_n,
-            f0_eff, f1_eff, n,
-            K_SG_K0, M_SG_M0,
-            K_SG_K1, M_SG_M1,
+        g_f0_nodal, dJ_df1_eff = forcing_param_grads_spatial_jax(
+            jnp.asarray(u_n), jnp.asarray(mu_n),
+            jnp.asarray(f0_nodal_adj), f1_eff, n
         )
-
-        gf0_eff = dt * float(dJ_df0_eff)
+        g_f0_nodal = dt * np.asarray(g_f0_nodal)  # shape (Nx+1, Ny+1)
         gf1_eff = dt * float(dJ_df1_eff)
 
-        # Forcing uses Sbar/Vbar (scalar) — same blending formula applies:
-        #   f0_eff = f0_s*(1-Sbar) + f0_m*(Sbar-Vbar) + f0_v*Vbar
-        g["f0_s"] += (1.0 - Sbar)        * gf0_eff
-        g["f0_m"] += (Sbar - Vbar)        * gf0_eff   # was: Sbar * gf0_eff
-        g["f0_v"] += Vbar                 * gf0_eff
-        g["f1_s"] += (1.0 - Sbar)        * gf1_eff
-        g["f1_m"] += (Sbar - Vbar)        * gf1_eff   # was: Sbar * gf1_eff
-        g["f1_v"] += Vbar                 * gf1_eff
+        # Phase-sensitivity weights on the nodal grid
+        V_nodal = elem_to_node_weights(V_elem, Nx, Ny).reshape(Nx + 1, Ny + 1)
+        S_nodal = elem_to_node_weights(S_elem, Nx, Ny).reshape(Nx + 1, Ny + 1)
+
+        # Correct chain rule: dJ/df0_v = sum_i g_f0_nodal_i * V_nodal_i
+        g["f0_v"] += float(np.sum(g_f0_nodal * V_nodal))
+        g["f0_m"] += float(np.sum(g_f0_nodal * (S_nodal - V_nodal)))
+        g["f0_s"] += float(np.sum(g_f0_nodal * (1.0 - S_nodal)))
+        g["f1_s"] += (1.0 - Sbar) * gf1_eff
+        g["f1_m"] += (Sbar - Vbar) * gf1_eff
+        g["f1_v"] += Vbar          * gf1_eff
 
     return g
 
@@ -6372,7 +6398,7 @@ prior_full = GaussianLogPrior(
     theta_prior = theta_lab,
     sigma_log   = np.array([
         1.0,    # rho_vap0: ±170% — order-of-magnitude uncertain
-        np.inf,    # rho_vap1: ±300% — very poorly known
+        0.4,    
         0.30,   # kappa_surface: ±35%
         0.20,   # kappa_deep:    ±22%
         0.50,   # y_trans: ±60% rough stratigraphic prior
@@ -6423,7 +6449,7 @@ def run_inf():
         print("current therm: ", therm_cur)
 
                                                                                                                                                     
-def run_inf_lbfgs(mean_round_iters=1, var_round_iters=20, prior=None):
+def run_inf_lbfgs(mean_round_iters=30, var_round_iters=20, prior=None):
     from scipy.optimize import minimize
 
     OBJ_SCALE = 1e6   # rescale so gradients are O(1e-1) — allows L-BFGS-B line search to take proper steps
@@ -6432,59 +6458,79 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=20, prior=None):
                 'rho_vap0': VAP['rho_vap0'],              
                 'rho_vap1': VAP['rho_vap1']}                                                                                                                          
 
-    # ── Stage 1: mean-only, rho_vap0 free ────────────────────────────────────                                                                                       
-    def obj_mean(x_log):                                  
-        rho0    = float(np.exp(x_log[0]))                                                                                                                             
-        VAP_cur = {**VAP_base, 'rho_vap0': rho0}          
-                                                                                                                                                                    
+    # ── Stage 1: mean-only, rho_vap0 + f0_v free ────────────────────────────────
+    def obj_mean(x_log):
+        rho0 = float(np.exp(x_log[0]))
+        f0_v = float(np.exp(x_log[1]))
+        VAP_cur = {**VAP_base, 'rho_vap0': rho0, 'f0': f0_v}
+
         J, g_therm_adj, _ = validate_depth_adjoint_fd(
-            dx, dy, U_obs,                                                                                                                                            
-            run_forward, U0,                              
+            dx, dy, U_obs,
+            run_forward, U0,
             SOLID_obs, MELT_obs, VAP_cur,
             ell, theta_kappa_obs,
-            Nx, Ny, Ly, num_nodes, P, T_abl,                                                                                                                          
+            Nx, Ny, Ly, num_nodes, P, T_abl,
             adjoint_one_step,
-            adjoint_grad_all_phase,                                                                                                                                   
-            forcing_param_grads_numpy,                    
+            adjoint_grad_all_phase,
+            forcing_param_grads_numpy,
             _clear_all_kappa_caches,
-            bc_idx, params,                                                                                                                                           
+            bc_idx, params,
             M_bc, K_bc, solve_A,
-            K_SG_K0, K_SG_K1, M_SG_M0, M_SG_M1,                                                                                                                       
-            sigma2_obs_hist,                                                                                                                                          
+            K_SG_K0, K_SG_K1, M_SG_M0, M_SG_M1,
+            sigma2_obs_hist,
             spatial_op_obs, h_obs_hist,
-            kappa_param=kappa_param_obs,                                                                                                                              
+            kappa_param=kappa_param_obs,
             compute_adjoint_grad_kappa_fn=compute_adjoint_grad_kappa_phase_matrixfree_all,
-            Lx=Lx, N_KL=N_KL, sigma_d=sigma_d, eps_smooth=eps_smooth,                                                                                                 
+            Lx=Lx, N_KL=N_KL, sigma_d=sigma_d, eps_smooth=eps_smooth,
             run_fd_check=False, mean_only=True)
-                                                                                                                                                                    
-        g_log = np.array([g_therm_adj.get('rho_vap0', 0.0) * rho0])
+
+        g_log = np.array([
+            g_therm_adj.get('rho_vap0', 0.0) * rho0,
+            g_therm_adj.get('f0_v',     0.0) * f0_v,
+        ])
+
+        if prior is not None:
+            theta1     = np.array([rho0, f0_v])
+            theta1_ref = np.array([VAP['rho_vap0'], VAP['f0']])
+            sigma1     = np.array([3.0, 0.5])
+            log_ratio  = np.log(theta1 / theta1_ref)
+            nll_p      = 0.5 * np.sum((log_ratio / sigma1) ** 2)
+            grad_p     = log_ratio / sigma1 ** 2   # d(nll)/d(log theta)
+            #J         += nll_p
+            #g_log     += grad_p
+
         print(f"  [mean] J={J:.4e}  rho_vap0={rho0:.4e} (truth {VAP_obs['rho_vap0']:.2e})"
-            f"  g={g_log[0]:.2e}")
-        return float(J) * OBJ_SCALE, g_log * OBJ_SCALE                            
-                                                                                                                                                                    
-    print("\n=== Stage 1: mean-only, rho_vap0 ===")                                                                                                                   
+              f"  f0_v={f0_v:.4f} (truth {VAP_obs['f0']:.4f})  g={g_log}")
+        return float(J) * OBJ_SCALE, g_log * OBJ_SCALE
+
+    print("\n=== Stage 1: mean-only, rho_vap0 + f0_v ===")
     res1 = minimize(
-        obj_mean,                                                                                                                                                     
-        x0=np.log([VAP_base['rho_vap0']]),                
-        jac=True, method='L-BFGS-B',                                                                                                                                  
-        bounds=[(np.log(1e5), np.log(1e12))],
-        options={'maxiter': mean_round_iters, 'ftol': 1e-10, 'gtol': 2e-4})                                                                                           
-                                                                                                                                                                    
+        obj_mean,
+        x0=np.log([VAP_base['rho_vap0'], VAP['f0']]),
+        jac=True, method='L-BFGS-B',
+        bounds=[
+            (np.log(1e5),   np.log(1e12)),   # rho_vap0
+            (np.log(0.01),  np.log(1.0)),    # f0_v
+        ],
+        options={'maxiter': mean_round_iters, 'ftol': 1e-10, 'gtol': 2e-4})
+
     rho_vap0_fixed = float(np.exp(res1.x[0]))
-    print(f"  Stage 1 done: rho_vap0={rho_vap0_fixed:.4e}  J={res1.fun/OBJ_SCALE:.4e}  {res1.message}")                                                                         
-                                                                                                                                                                    
+    f0_v_fixed     = float(np.exp(res1.x[1]))
+    print(f"  Stage 1 done: rho_vap0={rho_vap0_fixed:.4e}  f0_v={f0_v_fixed:.4f}"
+          f"  J={res1.fun/OBJ_SCALE:.4e}  {res1.message}")
+
     # ── Stage 2: mean+variance, rho_vap1 + kappa free ────────────────────────
-    def obj_var(x_log):                                                                                                                                               
-        rho1        = float(np.exp(x_log[0]))                                                                                                                         
+    def obj_var(x_log):
+        rho1        = float(np.exp(x_log[0]))
         theta_kappa = np.exp(x_log[1:])
-        kappa_cur   = SigmoidLayeredKappa(                                                                                                                            
-            Ny=Ny, Ly=Ly,                                 
-            kappa_surface=float(theta_kappa[0]),                                                                                                                      
+        kappa_cur   = SigmoidLayeredKappa(
+            Ny=Ny, Ly=Ly,
+            kappa_surface=float(theta_kappa[0]),
             kappa_deep=float(theta_kappa[1]),
-            y_transition=float(theta_kappa[2]),                                                                                                                       
-            width=float(theta_kappa[3])                 
-        )                                                                                                                                                             
-        VAP_cur = {**VAP_base, 'rho_vap0': rho_vap0_fixed, 'rho_vap1': rho1}
+            y_transition=float(theta_kappa[2]),
+            width=float(theta_kappa[3])
+        )
+        VAP_cur = {**VAP_base, 'rho_vap0': rho_vap0_fixed, 'f0': f0_v_fixed, 'rho_vap1': rho1}
                                                                                                                                                                     
         J, g_therm_adj, g_kappa_adj = validate_depth_adjoint_fd(                                                                                                      
             dx, dy, U_obs,
@@ -6545,14 +6591,16 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=20, prior=None):
     theta2 = np.exp(res2.x)
     print(f"\nFinal result:")
     print(f"  rho_vap0   = {rho_vap0_fixed:.4e}  (truth {VAP_obs['rho_vap0']:.2e})")
+    print(f"  f0_v       = {f0_v_fixed:.4f}      (truth {VAP_obs['f0']:.4f})")
     print(f"  rho_vap1   = {theta2[0]:.4e}  (truth {VAP_obs['rho_vap1']:.2e})")
     print(f"  kappa_surf = {theta2[1]:.4e}  (truth {theta_kappa_obs[0]:.2e})")
-    print(f"  kappa_deep = {theta2[2]:.4e}  (truth {theta_kappa_obs[1]:.2e})")                                                                                        
+    print(f"  kappa_deep = {theta2[2]:.4e}  (truth {theta_kappa_obs[1]:.2e})")
     print(f"  y_trans    = {theta2[3]:.4e}  (truth {theta_kappa_obs[2]:.2e})")
     print(f"  width      = {theta2[4]:.4e}  (truth {theta_kappa_obs[3]:.2e})")
     print(f"  J_final    = {res2.fun/OBJ_SCALE:.4e}  {res2.message}")
     return {'stage1': res1, 'stage2': res2}
 
+run_inf_lbfgs(prior=prior_full)
 
 validate_depth_adjoint_fd(dx,dy,U_obs,
     run_forward,
@@ -6573,7 +6621,6 @@ validate_depth_adjoint_fd(dx,dy,U_obs,
     Lx=Lx,
     N_KL=N_KL, sigma_d = sigma_d, eps_smooth=eps_smooth)
 
-run_inf_lbfgs(prior=prior_full)
 #run_inf()
 
 prior_none = None

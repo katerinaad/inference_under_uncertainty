@@ -130,7 +130,7 @@ MELT_obs = dict(
 )
 
 # ---- vapour parameter set ----
-VAP = dict(k0=0.26, k1=0.0, m0=2650  * 1570, m1=2650  * 1570, f0=0.499, f1=0.0,
+VAP = dict(k0=0.26, k1=0.0, m0=2650  * 1570, m1=2650  * 1570, f0=0.25, f1=0.0,
            rho_vap0=1266400000, rho_vap1=15664000*0.2)
 
 VAP_obs = dict(
@@ -138,7 +138,7 @@ VAP_obs = dict(
     k1      = 0.0,
     m0      =  2650  * 1570,      # 1010.6 J/(m³·K) — rho_v * Cp_v
     m1      =  2650  * 1570,
-    f0      = 0.5,
+    f0      = 0.1,
     f1      = 0.0,
    # rho_vap0 = 2650 * 1, # 3.621e10 J/m³ — rho_melt * L_v (Gokhale Table 1)414.65414574953286
     rho_vap0 =  1366400000 ,
@@ -150,7 +150,7 @@ theta_lab = np.array([VAP['rho_vap0'], VAP['rho_vap1'], 100, 40, 0.85*Ly, 0.1*Ly
 T_vap_lo    = 354.0          # onset  of vaporisation window
 T_vap_hi    = 554.0          # end    of vaporisation window
 Delta_vap   = 50.0            # smoothing half-width (same role as Delta_melt)
-T_abl = 550.0
+T_abl = 450.0
 
 # Mesh
 x = np.linspace(0, Lx, Nx + 1)
@@ -6509,8 +6509,8 @@ def run_inf_lbfgs(mean_round_iters=30, var_round_iters=20, prior=None):
         x0=np.log([VAP_base['rho_vap0'], VAP['f0']]),
         jac=True, method='L-BFGS-B',
         bounds=[
-            (np.log(7e6),   np.log(1e12)),   # rho_vap0
-            (np.log(0.01),  np.log(1.0)),    # f0_v
+            (np.log(7e8),   np.log(1e10)),   # rho_vap0
+            (np.log(0.05),  np.log(0.4)),    # f0_v
         ],
         options={'maxiter': mean_round_iters, 'ftol': 1e-10, 'gtol': 2e-4, 'maxcor':1})
 

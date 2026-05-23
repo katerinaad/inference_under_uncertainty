@@ -43,18 +43,18 @@ def rss_mb():
 # Domain & FE Mesh Parameters (2D physical space)
 # ------------------------------
 Lx, Ly = 0.21, 0.21
-Nx, Ny = 40,40
+Nx, Ny = 55,55
 k0= 1.0       # baseline conductivity
 k1 = 0.2 # scaling for fluctuations
 m0 = 1e6
 m1 = 1e5
-f0= 1.0
+f0= 0.0
 f1 = 0.0
 rhoL = 0
 #rho_vap0 = 1e9    # latent heat of vaporisation (J/m^3); set >0 to activate vapour transition
 #rho_vap1 = 1e7
-T_final = 3.0
-dt = 0.1
+T_final = 10.0
+dt = 0.075
 N_KL = 40 # number of KL terms
 P = N_KL + 1     # total chaos modes (0th = mean, 1...N_KL = KL terms)
 dx, dy = Lx/Nx, Ly/Ny
@@ -72,25 +72,26 @@ sigma_d = 1e-10
 kappa_param_obs = SigmoidLayeredKappa(
     Ny=Ny,
     Ly=Ly,
-    kappa_surface=80.0,    # short correlation near surface (weathered/fractured)
-    kappa_deep=60.0,       # longer correlation at depth (competent granite)
-    y_transition=0.75*Ly,   # transition at 60% depth
+    kappa_surface=60.0,    # short correlation near surface (weathered/fractured)
+    kappa_deep=40.0,       # longer correlation at depth (competent granite)
+    y_transition=0.8*Ly,   # transition at 60% depth
     width=0.1*Ly,          # transition zone ~10% of domain width
     )
 kappa_param_init = SigmoidLayeredKappa(
     Ny=Ny,
     Ly=Ly,
-    kappa_surface=100.0,    # short correlation near surface (weathered/fractured)
-    kappa_deep=40.0,       # longer correlation at depth (competent granite)
-    y_transition=0.85*Ly,   # transition at 60% depth
+    kappa_surface=120.0,    # short correlation near surface (weathered/fractured)
+    kappa_deep=20.0,       # longer correlation at depth (competent granite)
+    y_transition=0.9*Ly,   # transition at 60% depth
     width=0.1*Ly,          # transition zone ~10% of domain width
     )
-theta_kappa_init = np.array([100.0,40.0, 0.85*Ly,0.1*Ly])
-theta_kappa_obs = np.array([80.0,60.0, 0.75*Ly,0.1*Ly])
+theta_kappa_init = np.array([120.0,20.0, 0.9*Ly,0.1*Ly])
+theta_kappa_obs = np.array([60.0,40.0, 0.8*Ly,0.1*Ly])
 np.random.seed(0)
 #Generate GMRF  and assemble SG matrices
 # Generate the GMRF
-sigma = 1.0  # standard deviation
+sigma = 1.0  # standard deviation (legacy, not used in SPDE path)
+sigma_field = 1.0  # marginal std of KL field; scales eigenvalues as sigma_field^2
 ell = 0.5 # correlation length
 xi_sample = np.random.normal(0, 1, N_KL)
 steps = int(T_final/dt)
@@ -99,13 +100,13 @@ fname = "U_hist.dat"   # or tempfile.NamedTemporaryFile(delete=False).name
 
 names = ["k0","k1","m0","m1", "f0", "f1", "ell"]
 # ---- phase-change controls (choose) ----
-T_melt_lo =173.0
-T_melt_hi =273.0
-Delta_melt = 50.0   # smoothing width
+T_melt_lo =1273.0
+T_melt_hi =1573.0
+Delta_melt = 150.0   # smoothing width
 
 # ---- solid / melt parameter sets ----
-SOLID =dict(k0=2.0,  k1=0.0, m0=2650 * 1050, m1= 2650 * 1050, f0=1.0, f1=0.0)
-MELT  =  dict(k0=2.0,  k1=0.0, m0=2650 * 1050, m1= 2650 * 1050, f0=1.0, f1=0.0)
+SOLID =dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*100, f0=1.0, f1=0.0)
+MELT  =  dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*100, f0=0.55, f1=0.1)
 #SOLID_obs = dict(k0=2.0,  k1=0.0, m0=2.3e6, m1=2e5, f0=1.0, f1=0.0)
 #MELT_obs  = dict(k0=2.0,  k1=0.0, m0=2.0e6, m1=2e5, f0=1.0, f1=0.0)
 # ---- vapour parameter set (properties above the vaporisation front) ----
@@ -113,44 +114,44 @@ MELT  =  dict(k0=2.0,  k1=0.0, m0=2650 * 1050, m1= 2650 * 1050, f0=1.0, f1=0.0)
 
 SOLID_obs = dict(
     k0  = 2.0,              # W/(m·K) — Gokhale Table 1
-    k1  = 0.0,
+    k1  = 2.0,
     m0  = 2650 * 1050,      # 2.7825e6 J/(m³·K) — rho*Cp solid
-    m1  = 2650 * 1050,
+    m1  = 2650*100,
     f0  = 1.0,             # 0.75 * 0.83 — transmissivity * absorptivity correction
     f1  = 0.0,
 )
 
 MELT_obs = dict(
     k0  = 2.0,              # W/(m·K) — same as solid in Gokhale Table 1
-    k1  = 0.0,
+    k1  = 2.0,
     m0  = 2650 * 1050,      # 4.1605e6 J/(m³·K) — rho*Cp melt
-    m1  = 2650 * 1050,
-    f0  = 1.0,             # same absorptivity correction as solid
-    f1  = 0.0
+    m1  = 2650 * 100,
+    f0  = 0.8,             # same absorptivity correction as solid
+    f1  = 0.3
 )
 
 # ---- vapour parameter set ----
-VAP = dict(k0=0.26, k1=0.0, m0=2650  * 1570, m1=2650  * 1570, f0=0.25, f1=0.0,
-           rho_vap0=1266400000, rho_vap1=15664000*0.2)
+VAP = dict(k0=0.26, k1=0.01, m0=2650  * 1570, m1=2650  * 15, f0=0.2, f1=0.0,
+           rho_vap0=1566400000, rho_vap1=156640000)
 
 VAP_obs = dict(
     k0      = 0.26,            # W/(m·K) — vapour thermal conductivity
-    k1      = 0.0,
+    k1      = 0.01,
     m0      =  2650  * 1570,      # 1010.6 J/(m³·K) — rho_v * Cp_v
-    m1      =  2650  * 1570,
-    f0      = 0.1,
+    m1      =  2650  * 15,
+    f0      = 0.2,
     f1      = 0.0,
    # rho_vap0 = 2650 * 1, # 3.621e10 J/m³ — rho_melt * L_v (Gokhale Table 1)414.65414574953286
-    rho_vap0 =  1366400000 ,
-    rho_vap1 = 13664000*0.2 ,
+    rho_vap0 =  1366400000,
+    rho_vap1 = 136640000 ,
 )
 theta_lab = np.array([VAP['rho_vap0'], VAP['rho_vap1'], 100, 40, 0.85*Ly, 0.1*Ly])
 
 # ---- vaporisation phase controls ----
-T_vap_lo    = 354.0          # onset  of vaporisation window
-T_vap_hi    = 554.0          # end    of vaporisation window
-Delta_vap   = 50.0            # smoothing half-width (same role as Delta_melt)
-T_abl = 450.0
+T_vap_lo    = 3054.0          # onset  of vaporisation window
+T_vap_hi    = 3254.0          # end    of vaporisation window
+Delta_vap   = 100.0            # smoothing half-width (same role as Delta_melt)
+T_abl = 3255.0
 
 # Mesh
 x = np.linspace(0, Lx, Nx + 1)
@@ -2698,18 +2699,18 @@ def gaussian_beam_source_2d_jax(P0, T, x, y, y_edges, props):
     # α(T) = a + b * exp(-c/T)
     # Clamp T to avoid exp overflow at very low T
     T_safe  = jnp.maximum(T, 1.0)
-    alpha_T = a_abs           # (Nx+1, Ny+1)
+    alpha_T = a_abs         # (Nx+1, Ny+1)
 
     # ── Beer-Lambert depth attenuation ────────────────────────────────────────
     depth       = jnp.maximum(dist_s, 0.0)                                # (Nx+1, Ny+1)
     absorption  = jnp.exp(-alpha_T * depth)                               # (Nx+1, Ny+1)
 
     # ── Interior mask ─────────────────────────────────────────────────────────
-    interior_mask = _smooth_heaviside_jax(dist_s,5 )      # (Nx+1, Ny+1)
+    interior_mask = _smooth_heaviside_jax(dist_s,5)      # (Nx+1, Ny+1)
 
     # ── Volumetric heat source: Q = η * ||T||² * α * I * exp(-α*depth) ───────
     # Matches Gokhale Eq (44): S_beam = 2η * α_λ(T(ξ)) * I(x,y,T) * (1 - H(φ))
-    Q = eta*T_fac* 4*alpha_T * I_surface *interior_mask * absorption
+    Q = eta*T_fac* 8*alpha_T * I_surface *interior_mask * absorption
 
     return Q
 @jax.jit
@@ -2739,8 +2740,7 @@ def gaussian_beam_source_plus_loss_term_jax(P0, T, x, y, y_edges, props):
 
     y_top = y[-1]
     y0    = y_top - thickness                       # tracked surface y0(x)
-    dist_s = y0[:, None] - y[None, :]               # >0 inside material, <0 outside
-
+    dist_s = Ly - y[None, :]               # >0 inside material, <0 outside
     # --- Smooth "inside" mask and a one-sided surface delta (integrates ~1 on inside) ---
     H_in = _smooth_heaviside_jax(dist_s, eps_s)     # ~1 inside, ~0 outside
 
@@ -3361,9 +3361,9 @@ def build_SG_operators(sigma, ell, frozen, theta_kappa=None, kappa_param=None):
     diff = SPDEKLDifferentiator(Nx, Ny, Lx, Ly, N_KL, kappa_param)
     res = diff.derivatives(theta_kappa_use)  # ← Now always 1D array
 
-    eigvals_trunc = np.asarray(res.eigvals, float)     # (N_KL,)
-    phi_flat      = np.asarray(res.eigvecs, float)     # (n, N_KL)
-    dlambda_all   = np.asarray(res.dlambda, float)     # (N_KL, n_theta)
+    eigvals_trunc = sigma_field**2 * np.asarray(res.eigvals, float)  # (N_KL,)
+    phi_flat      = np.asarray(res.eigvecs, float)                   # (n, N_KL)
+    dlambda_all   = sigma_field**2 * np.asarray(res.dlambda, float)  # (N_KL, n_theta)
     dphi_all      = np.asarray(res.dphi, float)        # (n, N_KL, n_theta)
     # BUG FIX: use a LOCAL variable here to avoid overwriting the global xi_sample
     # that phi_one_step uses during the forward time-stepping. Using global xi_sample
@@ -4773,7 +4773,7 @@ def phi_one_step(t,
         plt.imshow(f0_nodal[:num_nodes].reshape((Nx +1, Ny+1 )).T,
                     extent=[0, Lx, 0, Ly], origin='lower', cmap='magma')
         plt.colorbar(label='kW')
-        plt.title('Temperature')
+        plt.title('f0_nodal')
         plt.figure(figsize=(6, 5))
         plt.imshow(U_new[:num_nodes].reshape((Nx + 1, Ny + 1)).T,
                     extent=[0, Lx, 0, Ly], origin='lower', cmap='magma')
@@ -4795,7 +4795,7 @@ def phi_one_step(t,
         plt.imshow(u_variance.T, extent=[0, Lx, 0, Ly], origin='lower', cmap='magma')
         plt.colorbar(label='Temperature Variance'); plt.title("Temperature Variance at Final Time")
         plt.xlabel("x"); plt.ylabel("y"); plt.show()
-    if t% 200==0:
+    if t% 2000==0:
     #
         plot()
     u_mean = U_new[:num_nodes]
@@ -4874,10 +4874,24 @@ def compute_full_adjoint_corrections(
     w_stiff = ((melt_prop["k0"] - solid_prop["k0"]) * dS_dT_elem_np1
                + (vap_prop["k0"] - melt_prop["k0"]) * dV_dT_elem_np1) * grad_dot_elem
 
-    # --- nodal assembly: each element weight w_e spreads to its 4 corner nodes ---
-    # This is elem_to_node_weights scaled by element area (dx*dy/4 per corner)
-    mass_nodal  = elem_to_node_weights(w_mass,  Nx, Ny) * (dx * dy / 4.0)
-    stiff_nodal = elem_to_node_weights(w_stiff, Nx, Ny) * (dx * dy / 4.0)
+    # --- nodal assembly: sum (not average) element weights to 4 corner nodes,
+    # then scale by dx*dy/4 = element_area * dTmean_e/dTmean_k.
+    # elem_to_node_weights *averages* (divides by node_counts) which is wrong;
+    # we need the raw sum so that the factor 1/4 comes only from dTmean_e/dTmean_k.
+    Ny1 = Ny + 1
+    def _elem_to_node_sum(w_elem):
+        out = np.zeros((Nx + 1) * Ny1)
+        ii, jj = np.meshgrid(np.arange(Nx), np.arange(Ny), indexing='ij')
+        ii, jj = ii.ravel(), jj.ravel()
+        c = w_elem.ravel()
+        np.add.at(out, ii * Ny1 + jj,           c)
+        np.add.at(out, ii * Ny1 + jj + 1,       c)
+        np.add.at(out, (ii + 1) * Ny1 + jj,     c)
+        np.add.at(out, (ii + 1) * Ny1 + jj + 1, c)
+        return out
+
+    mass_nodal  = _elem_to_node_sum(w_mass)  * (dx * dy / 4.0)
+    stiff_nodal = _elem_to_node_sum(w_stiff) * (dx * dy / 4.0)
 
     # Only mean mode (index 0) is affected
     correction[:num_nodes] = mass_nodal.ravel() + dt * stiff_nodal.ravel()
@@ -5358,6 +5372,7 @@ for i in range(num_obs):
     for t in range(Nt):
         T_obs[t, :, i] = sample_solution(U_obs[t, :], multi_idx, xi_sample)
 T_obs_mean = T_obs.mean(axis=2)   # (Nt, num_nodes)
+del T_obs
 from depth_objective import run_adjoint_depth, compute_depth_objective_trajectory, validate_depth_adjoint_fd
 from depth_objective import softmin_depth
 import numpy as np
@@ -5370,18 +5385,7 @@ for t in range(time_steps):
     h_obs_hist[t], _, _, _, _ = softmin_depth(
         u2d, y_nodes, T_abl, eps=10.0, beta=0.005)
 print("Hobs: ",h_obs_hist)
-# then call with sigma_d matching your depth obs noise
-J_total, J_hist = compute_depth_objective_trajectory(
-    U_obs, Nx, Ny, Ly, num_nodes,
-    T_abl=T_abl, eps=10.0, beta=2.0*dx,
-    h_obs_hist=h_obs_hist, sigma_d=sigma_d,
-)
-print(J_hist)
 
-
-
-
-import numpy as np
 import copy
 def make_phi_one_step(
     t,
@@ -6321,9 +6325,9 @@ _diff = SPDEKLDifferentiator(Nx, Ny, Lx, Ly, N_KL, kappa_param_obs)
 # update kappa_param values so derivatives are computed at kappa_cur
 _res = _diff.derivatives(theta_kappa_obs)
 
-eigvals_trunc = np.asarray(_res.eigvals, float)
+eigvals_trunc = sigma_field**2 * np.asarray(_res.eigvals, float)
 eigvecs_grid  = np.asarray(_res.eigvecs, float).reshape(Nx+1, Ny+1, N_KL)
-dlambda_all   = np.asarray(_res.dlambda, float)          # (N_KL, n_kappa)
+dlambda_all   = sigma_field**2 * np.asarray(_res.dlambda, float)     # (N_KL, n_kappa)
 dphi_all_grid = np.asarray(_res.dphi,    float).reshape(Nx+1, Ny+1, N_KL, -1)
 
 g_phase = adjoint_grad_all_phase(
@@ -6416,7 +6420,7 @@ def run_inf():
 
     lr_therm = [0,0]
     for i in range(iters):
-        J_cur, g_therm_adj, g_kappa_adj = validate_depth_adjoint_fd(dx,dy,U_obs,
+        J_cur, g_therm_adj, g_kappa_adj, _, _ = validate_depth_adjoint_fd(dx,dy,U_obs,
             run_forward,
             U0,
             SOLID_cur, MELT_cur, VAP_cur,
@@ -6458,16 +6462,105 @@ def run_inf_lbfgs(mean_round_iters=30, var_round_iters=20, prior=None):
                 'rho_vap0': VAP['rho_vap0'],              
                 'rho_vap1': VAP['rho_vap1']}                                                                                                                          
 
+    MELT_base = {**MELT_obs,
+                'f0': MELT['f0']}
+
+    # ── wellbore comparison: truth vs starting point ──────────────────────────
+    from plot_sg_capabilities import _fig_wellbore_mean_var, _fig1_mean_variance, _RC
+    import matplotlib; matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import matplotlib.image as mpimg
+    from datetime import date
+
+    plt.rcParams.update(_RC)
+
+    # pick the 4 timesteps with highest sigma2 (vaporisation-event peaks)
+    _sigma2 = sigma2_obs_hist.copy()
+    _snap_indices = []
+    for _ in range(4):
+        t_peak = int(np.argmax(_sigma2))
+        _snap_indices.append(t_peak)
+        _sigma2[max(0, t_peak-2):t_peak+3] = 0   # suppress neighbours
+    _snap_indices = sorted(_snap_indices)
+    print(f"  [wellbore] snapshot timesteps (peak σ): {_snap_indices}")
+    print(f"             σ at each: {[f'{np.sqrt(sigma2_obs_hist[t])*1000:.2f}mm' for t in _snap_indices]}")
+
+    _wb_kwargs = dict(
+        Nx=Nx, Ny=Ny, num_nodes=num_nodes, P=P, N_KL=N_KL,
+        multi_idx=multi_idx, eval_psi_fn=eval_psi,
+        Lx=Lx, Ly=Ly, T_abl=T_abl, dt=dt,
+        snap_indices=_snap_indices,
+        n_samples=300, seed=0,
+    )
+    print("  [wellbore] plotting truth (U_obs)...")
+    _fig_wellbore_mean_var(U_obs, **_wb_kwargs,
+                           label=f"truth  rho={VAP_obs['rho_vap0']:.3e}  f0={MELT_obs['f0']:.2f}",
+                           out="wellbore_truth.png")
+
+    print("  [wellbore] running starting-point forward solve...")
+    U_start, *_ = run_forward(U0, SOLID_obs, MELT_base, VAP_base, ell,
+                              theta_kappa=theta_kappa_obs,
+                              kappa_param=kappa_param_obs)
+    _fig_wellbore_mean_var(U_start, **_wb_kwargs,
+                           label=f"x0  rho={VAP_base['rho_vap0']:.3e}  f0={MELT_base['f0']:.2f}",
+                           out="wellbore_start.png")
+
+    # temperature mean & variance at the same snapshots
+    _t1_kwargs = dict(
+        Nx=Nx, Ny=Ny, num_nodes=num_nodes, P=P,
+        time_steps=U_obs.shape[0], dt=dt, Lx=Lx, Ly=Ly,
+        snap_indices=_snap_indices,
+    )
+    print("  [temp] plotting truth temperature mean & variance...")
+    _fig1_mean_variance(U_obs,   **_t1_kwargs, out="temp_mean_var_truth.png")
+    print("  [temp] plotting x0 temperature mean & variance...")
+    _fig1_mean_variance(U_start, **_t1_kwargs, out="temp_mean_var_start.png")
+
+    # stitch wellbore comparison
+    _img_t = mpimg.imread("wellbore_truth.png")
+    _img_s = mpimg.imread("wellbore_start.png")
+    _fig, _axes = plt.subplots(2, 1, figsize=(18, 12))
+    _fig.suptitle(
+        f"Wellbore comparison — mean ± 1σ/2σ  |  {date.today()}\n"
+        f"Truth: rho_vap0={VAP_obs['rho_vap0']:.3e}  f0={MELT_obs['f0']:.2f}     "
+        f"x0: rho_vap0={VAP_base['rho_vap0']:.3e}  f0={MELT_base['f0']:.2f}",
+        fontsize=11)
+    _axes[0].imshow(_img_t); _axes[0].axis("off"); _axes[0].set_title("Truth (U_obs)", fontsize=10)
+    _axes[1].imshow(_img_s); _axes[1].axis("off"); _axes[1].set_title("Starting point (x0)", fontsize=10)
+    plt.tight_layout()
+    plt.savefig("wellbore_comparison.png", dpi=150, bbox_inches="tight")
+    print("  [wellbore] saved wellbore_comparison.png")
+    plt.close(_fig)
+
     # ── Stage 1: mean-only, rho_vap0 + f0_v free ────────────────────────────────
+    _stage1_log = []   # accumulates one dict per function evaluation
+
+    # Write depth log header once (observed values won't change across iterations)
+    _depth_csv = "stage1_depth_log.csv"
+    _T = time_steps
+    _depth_header = (
+        "# h_obs,"    + ",".join(f"{v:.6e}" for v in h_obs_hist) + "\n"
+        "# sigma2_obs," + ",".join(f"{v:.6e}" for v in sigma2_obs_hist) + "\n"
+    )
+    _depth_col_headers = (
+        "iter,rho_vap0,f0_m,"
+        + ",".join(f"h_pred_t{t}" for t in range(_T)) + ","
+        + ",".join(f"var_pred_t{t}" for t in range(_T)) + "\n"
+    )
+    with open(_depth_csv, "w") as _fh:
+        _fh.write(_depth_header)
+        _fh.write(_depth_col_headers)
+
     def obj_mean(x_log):
         rho0 = float(np.exp(x_log[0]))
-        f0_v = float(np.exp(x_log[1]))
-        VAP_cur = {**VAP_base, 'rho_vap0': rho0, 'f0': f0_v}
+        f0_m = float(np.exp(x_log[1]))
+        VAP_cur = {**VAP_base, 'rho_vap0': rho0}
+        MELT_cur = {**MELT_base, 'f0': f0_m}
 
-        J, g_therm_adj, _ = validate_depth_adjoint_fd(
+        J, g_therm_adj, _, mean_depth, var_depth = validate_depth_adjoint_fd(
             dx, dy, U_obs,
             run_forward, U0,
-            SOLID_obs, MELT_obs, VAP_cur,
+            SOLID_obs, MELT_cur, VAP_cur,
             ell, theta_kappa_obs,
             Nx, Ny, Ly, num_nodes, P, T_abl,
             adjoint_one_step,
@@ -6486,12 +6579,12 @@ def run_inf_lbfgs(mean_round_iters=30, var_round_iters=20, prior=None):
 
         g_log = np.array([
             g_therm_adj.get('rho_vap0', 0.0) * rho0,
-            g_therm_adj.get('f0_v',     0.0) * f0_v,
+            g_therm_adj.get('f0_m',     0.0) * f0_m,
         ])
 
         if prior is not None:
-            theta1     = np.array([rho0, f0_v])
-            theta1_ref = np.array([VAP['rho_vap0'], VAP['f0']])
+            theta1     = np.array([rho0, f0_m])
+            theta1_ref = np.array([VAP['rho_vap0'], MELT['f0']])
             sigma1     = np.array([3.0, 0.5])
             log_ratio  = np.log(theta1 / theta1_ref)
             nll_p      = 0.5 * np.sum((log_ratio / sigma1) ** 2)
@@ -6500,7 +6593,46 @@ def run_inf_lbfgs(mean_round_iters=30, var_round_iters=20, prior=None):
          #   g_log     += grad_p
 
         print(f"  [mean] J={J:.4e}  rho_vap0={rho0:.4e} (truth {VAP_obs['rho_vap0']:.2e})"
-              f"  f0_v={f0_v:.4f} (truth {VAP_obs['f0']:.4f})  g={g_log}")
+              f"  f0_v={f0_m:.4f} (truth {MELT_obs['f0']:.4f})  g={g_log}")
+
+        _stage1_log.append({
+            'iter':       len(_stage1_log) + 1,
+            'J':          float(J),
+            'rho_vap0':   rho0,
+            'f0_v':       f0_m,
+            'g':          g_log.copy(),
+            'depth_traj': mean_depth.copy(),
+            'var_traj':   var_depth.copy(),
+        })
+
+        # Append one row immediately so data is safe if the run crashes mid-optimisation
+        with open(_depth_csv, "a") as _fh:
+            _row = (
+                f"{len(_stage1_log)},{rho0:.6e},{f0_m:.6f},"
+                + ",".join(f"{v:.6e}" for v in mean_depth) + ","
+                + ",".join(f"{v:.6e}" for v in var_depth) + "\n"
+            )
+            _fh.write(_row)
+
+        np.savez("stage1_log.npz",
+                 iters           = np.array([d['iter']      for d in _stage1_log]),
+                 J               = np.array([d['J']          for d in _stage1_log]),
+                 rho_vap0        = np.array([d['rho_vap0']   for d in _stage1_log]),
+                 f0_v            = np.array([d['f0_v']        for d in _stage1_log]),
+                 g               = np.array([d['g']           for d in _stage1_log]),
+                 depth_traj      = np.array([d['depth_traj']  for d in _stage1_log]),
+                 var_traj        = np.array([d['var_traj']    for d in _stage1_log]),
+                 h_obs_hist      = h_obs_hist,
+                 sigma2_obs_hist = sigma2_obs_hist,
+                 rho_truth       = float(VAP_obs['rho_vap0']),
+                 f0_truth        = float(MELT_obs['f0']))
+
+        with open("stage1_log.csv", "w") as _f:
+            _f.write(f"# rho_truth={float(VAP_obs['rho_vap0']):.6e}  f0_truth={float(MELT_obs['f0']):.4f}\n")
+            _f.write("iter,J,rho_vap0,f0_v,g_rho,g_f0\n")
+            for d in _stage1_log:
+                _f.write(f"{d['iter']},{d['J']:.6e},{d['rho_vap0']:.6e},{d['f0_v']:.6f},{d['g'][0]:.4e},{d['g'][1]:.4e}\n")
+
         return float(J) * OBJ_SCALE, g_log * OBJ_SCALE
 
     print("\n=== Stage 1: mean-only, rho_vap0 + f0_v ===")
@@ -6509,18 +6641,33 @@ def run_inf_lbfgs(mean_round_iters=30, var_round_iters=20, prior=None):
         x0=np.log([VAP_base['rho_vap0'], VAP['f0']]),
         jac=True, method='L-BFGS-B',
         bounds=[
-            (np.log(7e8),   np.log(1e10)),   # rho_vap0
-            (np.log(0.05),  np.log(0.4)),    # f0_v
+            (np.log(7e8),   np.log(7e9)),   # rho_vap0
+            (np.log(0.4),  np.log(0.9)),    # f0_v
         ],
         options={'maxiter': mean_round_iters, 'ftol': 1e-10, 'gtol': 2e-4, 'maxcor':1})
 
     rho_vap0_fixed = float(np.exp(res1.x[0]))
-    f0_v_fixed     = float(np.exp(res1.x[1]))
-    print(f"  Stage 1 done: rho_vap0={rho_vap0_fixed:.4e}  f0_v={f0_v_fixed:.4f}"
+    f0_m_fixed     = float(np.exp(res1.x[1]))
+    print(f"  Stage 1 done: rho_vap0={rho_vap0_fixed:.4e}  f0_v={f0_m_fixed:.4f}"
           f"  J={res1.fun/OBJ_SCALE:.4e}  {res1.message}")
+
+    np.savez("stage1_log.npz",
+             iters           = np.array([d['iter']      for d in _stage1_log]),
+             J               = np.array([d['J']          for d in _stage1_log]),
+             rho_vap0        = np.array([d['rho_vap0']   for d in _stage1_log]),
+             f0_v            = np.array([d['f0_v']        for d in _stage1_log]),
+             g               = np.array([d['g']           for d in _stage1_log]),
+             depth_traj      = np.array([d['depth_traj']  for d in _stage1_log]),
+             var_traj        = np.array([d['var_traj']    for d in _stage1_log]),
+             h_obs_hist      = h_obs_hist,
+             sigma2_obs_hist = sigma2_obs_hist,
+             rho_truth       = float(VAP_obs['rho_vap0']),
+             f0_truth        = float(MELT_obs['f0']))
+    print("  Saved stage1_log.npz")
 
     # ── Stage 2: mean+variance, rho_vap1 + kappa free ────────────────────────
     def obj_var(x_log):
+        _clear_all_kappa_caches()
         rho1        = float(np.exp(x_log[0]))
         theta_kappa = np.exp(x_log[1:])
         kappa_cur   = SigmoidLayeredKappa(
@@ -6530,11 +6677,10 @@ def run_inf_lbfgs(mean_round_iters=30, var_round_iters=20, prior=None):
             y_transition=float(theta_kappa[2]),
             width=float(theta_kappa[3])
         )
-        VAP_cur = {**VAP_base, 'rho_vap0': rho_vap0_fixed, 'f0': f0_v_fixed, 'rho_vap1': rho1}
-                                                                                                                                                                    
-        J, g_therm_adj, g_kappa_adj = validate_depth_adjoint_fd(                                                                                                      
+        VAP_cur = {**VAP_base, 'rho_vap0': rho_vap0_fixed, 'rho_vap1': rho1}
+        J, g_therm_adj, g_kappa_adj, _, _ = validate_depth_adjoint_fd(
             dx, dy, U_obs,
-            run_forward, U0,                                                                                                                                          
+            run_forward, U0,
             SOLID_obs, MELT_obs, VAP_cur,                 
             ell, theta_kappa,
             Nx, Ny, Ly, num_nodes, P, T_abl,
@@ -6591,7 +6737,7 @@ def run_inf_lbfgs(mean_round_iters=30, var_round_iters=20, prior=None):
     theta2 = np.exp(res2.x)
     print(f"\nFinal result:")
     print(f"  rho_vap0   = {rho_vap0_fixed:.4e}  (truth {VAP_obs['rho_vap0']:.2e})")
-    print(f"  f0_v       = {f0_v_fixed:.4f}      (truth {VAP_obs['f0']:.4f})")
+    print(f"  f0_v       = {f0_m_fixed:.4f}      (truth {VAP_obs['f0']:.4f})")
     print(f"  rho_vap1   = {theta2[0]:.4e}  (truth {VAP_obs['rho_vap1']:.2e})")
     print(f"  kappa_surf = {theta2[1]:.4e}  (truth {theta_kappa_obs[0]:.2e})")
     print(f"  kappa_deep = {theta2[2]:.4e}  (truth {theta_kappa_obs[1]:.2e})")
@@ -6599,6 +6745,8 @@ def run_inf_lbfgs(mean_round_iters=30, var_round_iters=20, prior=None):
     print(f"  width      = {theta2[4]:.4e}  (truth {theta_kappa_obs[3]:.2e})")
     print(f"  J_final    = {res2.fun/OBJ_SCALE:.4e}  {res2.message}")
     return {'stage1': res1, 'stage2': res2}
+
+
 
 run_inf_lbfgs(prior=prior_full)
 

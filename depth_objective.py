@@ -371,7 +371,7 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
                                beta=None,
                                evap_range=0.0,
                                sigma_d=None,
-                               eps_fd=5e-5,
+                               eps_fd=5e-4,
                                verbose=True,
                                # kappa gradient: pass these from the call site in inf_layered_vap.py
                                kappa_param=None,           # LayeredKappa / SmoothKappa instance
@@ -400,6 +400,7 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
         J = 0.0
         wz = _trap_weights(y_nodes)
         beta = 0.005
+        mean_meas, var_meas = np.zeros(time_steps), np.zeros(time_steps)
         for t in range(1, time_steps):
             u_t = U_hist[t]
             u_mean_2d = u_t[:num_nodes].reshape(Nx + 1, Ny + 1)
@@ -411,18 +412,23 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
             r_mu = h_u0 - float(h_obs_hist[t])
             if mean_only ==True:    
                 J += 0.5 * r_mu**2 / max(1e-20, sigma2_obs_hist[t])
+            mean_meas[t] = float(h_u0)
+            U_modes = u_t.reshape(P, num_nodes)
+            g_dot_uk = U_modes[1:] @ g_flat  # (P-1,)
+            sigma2_pred = float(np.sum(g_dot_uk**2))
+            r_var = sigma2_pred - float(sigma2_obs_hist[t])
             # --- variance term ---
             if mean_only==False:
-                U_modes = u_t.reshape(P, num_nodes)
-                g_dot_uk = U_modes[1:] @ g_flat  # (P-1,)
-                sigma2_pred = float(np.sum(g_dot_uk**2))
-                r_var = sigma2_pred - float(sigma2_obs_hist[t])
+ 
                 J += 0.5 * (r_var**2) *1e10
-        return J
+            var_meas[t] = sigma2_pred
+       # print("mean depth trajectory: ", mean_meas)
+       # print("variance trajectory: ",var_meas )
+        return J, mean_meas, var_meas
 
     print("UOBS", np.max(U_obs))
 
-    J_base = _J_of_hist(U_hist0)
+    J_base, _mean_depth_traj, _var_depth_traj = _J_of_hist(U_hist0)
     print("before adjoint")
     # 2. Adjoint sweep — use local_params0 (kappa-specific snapshot) so the
     # adjoint forcing VJP reads the same eigvecs as the forward solve did.
@@ -497,7 +503,7 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
     def _J_perturbed(solid_p, melt_p, vap_p, U0_clean):
         clear_caches_fn()
         return _J_of_hist(run_forward_fn(U0_clean, solid_p, melt_p, vap_p, ell,
-                                         theta_kappa=theta_kappa, kappa_param=kappa_param)[0])
+                                         theta_kappa=theta_kappa, kappa_param=kappa_param)[0])[0]
 
     #if verbose:
     #    print("\n" + "-" * 72)
@@ -508,9 +514,8 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
     if run_fd_check==True:
         results = {}
         param_pairs = [
-            ('m0_m', 'm0', 'melt'),
+            ('f0_m', 'f0', 'melt'),
             ('rho_vap0', 'rho_vap0', 'vap'),
-            ('rho_vap1', 'rho_vap1', 'vap')
         ]
         for param_name, key, which in param_pairs:
             g_adj = float(g_phase[param_name])
@@ -569,10 +574,10 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
 
                 clear_caches_fn()
                 J_p = _J_of_hist(run_forward_fn(U0_clean, solid_prop, melt_prop, vap_prop, ell,
-                                                theta_kappa=tk_p, kappa_param=kappa_param_p)[0])
+                                                theta_kappa=tk_p, kappa_param=kappa_param_p)[0])[0]
                 clear_caches_fn()
                 J_m = _J_of_hist(run_forward_fn(U0_clean, solid_prop, melt_prop, vap_prop, ell,
-                                                theta_kappa=tk_m, kappa_param=kappa_param_m)[0])
+                                                theta_kappa=tk_m, kappa_param=kappa_param_m)[0])[0]
 
                 g_fd_l = (J_p - J_m) / (2.0 * h_k)
                 g_adj_l = float(g_kappa_adj[l])
@@ -589,7 +594,7 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
 
     if verbose:
         print("-" * 72)
-    return J_base, g_phase, g_kappa_adj
+    return J_base, g_phase, g_kappa_adj, _mean_depth_traj, _var_depth_traj
 
 # ---------------------------------------------------------------------------
 

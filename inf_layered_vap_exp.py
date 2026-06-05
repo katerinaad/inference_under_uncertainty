@@ -56,8 +56,8 @@ f1 = 0.0
 rhoL = 0
 #rho_vap0 = 1e9    # latent heat of vaporisation (J/m^3); set >0 to activate vapour transition
 #rho_vap1 = 1e7
-T_final = 12.0
-dt = 0.075
+T_final = 3.0
+dt = 0.05
 N_KL = 45 # number of KL terms
 P = N_KL + 1     # total chaos modes (0th = mean, 1...N_KL = KL terms)
 dx, dy = Lx/Nx, Ly/Ny
@@ -103,13 +103,13 @@ fname = "U_hist.dat"   # or tempfile.NamedTemporaryFile(delete=False).name
 
 names = ["k0","k1","m0","m1", "f0", "f1", "ell"]
 # ---- phase-change controls (choose) ----
-T_melt_lo =1273.0
-T_melt_hi =1573.0
+T_melt_lo =173.0
+T_melt_hi =373.0
 Delta_melt = 150.0   # smoothing width
 
 # ---- solid / melt parameter sets ----
 SOLID =dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*100, f0=1.0, f1=0.0)
-MELT  =  dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*100, f0=0.55, f1=0.0)
+MELT  =  dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*100, f0=0.8, f1=0.0)
 #SOLID_obs = dict(k0=2.0,  k1=0.0, m0=2.3e6, m1=2e5, f0=1.0, f1=0.0)
 #MELT_obs  = dict(k0=2.0,  k1=0.0, m0=2.0e6, m1=2e5, f0=1.0, f1=0.0)
 # ---- vapour parameter set (properties above the vaporisation front) ----
@@ -135,7 +135,7 @@ MELT_obs = dict(
 
 # ---- vapour parameter set ----
 VAP = dict(k0=0.26, k1=0.01, m0=2650  * 1570, m1=2650  * 15, f0=0.2, f1=0.0,
-           rho_vap0=1600000000, rho_vap1=200000000)
+           rho_vap0=1366400000, rho_vap1=200000000)
 
 VAP_obs = dict(
     k0      = 0.26,            # W/(m·K) — vapour thermal conductivity
@@ -151,10 +151,10 @@ VAP_obs = dict(
 theta_lab = np.array([VAP['rho_vap0'], MELT['f0'], 100, 40, 0.8*Ly, 0.1*Ly])
 
 # ---- vaporisation phase controls ----
-T_vap_lo    = 3054.0          # onset  of vaporisation window
-T_vap_hi    = 3254.0          # end    of vaporisation window
+T_vap_lo    = 354.0          # onset  of vaporisation window
+T_vap_hi    = 554.0          # end    of vaporisation window
 Delta_vap   = 100.0            # smoothing half-width (same role as Delta_melt)
-T_abl = 3255.0
+T_abl = 555.0
 
 # Mesh
 x = np.linspace(0, Lx, Nx + 1)

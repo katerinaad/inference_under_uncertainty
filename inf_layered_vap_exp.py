@@ -1,5 +1,8 @@
 import numpy as np
 import math
+import warnings
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+warnings.filterwarnings("ignore", category=Warning, module="scipy")
 import matplotlib.pyplot as plt
 from scipy.fft import fft2, ifft2, fftfreq
 from scipy.sparse import lil_matrix, csr_matrix, kron, identity
@@ -43,7 +46,7 @@ def rss_mb():
 # Domain & FE Mesh Parameters (2D physical space)
 # ------------------------------
 Lx, Ly = 0.21, 0.21
-Nx, Ny = 55,55
+Nx, Ny = 45,45
 k0= 1.0       # baseline conductivity
 k1 = 0.2 # scaling for fluctuations
 m0 = 1e6
@@ -55,7 +58,7 @@ rhoL = 0
 #rho_vap1 = 1e7
 T_final = 12.0
 dt = 0.075
-N_KL = 40 # number of KL terms
+N_KL = 45 # number of KL terms
 P = N_KL + 1     # total chaos modes (0th = mean, 1...N_KL = KL terms)
 dx, dy = Lx/Nx, Ly/Ny
 num_obs =100
@@ -106,7 +109,7 @@ Delta_melt = 150.0   # smoothing width
 
 # ---- solid / melt parameter sets ----
 SOLID =dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*100, f0=1.0, f1=0.0)
-MELT  =  dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*100, f0=0.55, f1=0.1)
+MELT  =  dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*100, f0=0.55, f1=0.0)
 #SOLID_obs = dict(k0=2.0,  k1=0.0, m0=2.3e6, m1=2e5, f0=1.0, f1=0.0)
 #MELT_obs  = dict(k0=2.0,  k1=0.0, m0=2.0e6, m1=2e5, f0=1.0, f1=0.0)
 # ---- vapour parameter set (properties above the vaporisation front) ----
@@ -127,7 +130,7 @@ MELT_obs = dict(
     m0  = 2650 * 1050,      # 4.1605e6 J/(m³·K) — rho*Cp melt
     m1  = 2650 * 100,
     f0  = 0.8,             # same absorptivity correction as solid
-    f1  = 0.3
+    f1  = 0.0
 )
 
 # ---- vapour parameter set ----
@@ -6315,39 +6318,6 @@ def compute_adjoint_grad_kappa_phase_matrixfree_all(
 
     return g_kappa
 
-Mu_hist, lam_hist, J_total, J_hist = run_adjoint_depth(
-    np.zeros_like(U_obs), U_obs,M_bc, K_bc, solve_A,
-    K_SG_K0, K_SG_K1, M_SG_M0, M_SG_M1,
-    SOLID_obs, MELT_obs, VAP_obs, spatial_op_obs, params, bc_idx,
-    Nx, Ny, Ly, num_nodes, P, T_abl, adjoint_one_step, np.zeros_like(sigma2_obs_hist),h_obs_hist = np.zeros_like(h_obs_hist), eps=eps_smooth, sigma_d=sigma_d
-)
-_diff = SPDEKLDifferentiator(Nx, Ny, Lx, Ly, N_KL, kappa_param_obs)
-# update kappa_param values so derivatives are computed at kappa_cur
-_res = _diff.derivatives(theta_kappa_obs)
-
-eigvals_trunc = sigma_field**2 * np.asarray(_res.eigvals, float)
-eigvecs_grid  = np.asarray(_res.eigvecs, float).reshape(Nx+1, Ny+1, N_KL)
-dlambda_all   = sigma_field**2 * np.asarray(_res.dlambda, float)     # (N_KL, n_kappa)
-dphi_all_grid = np.asarray(_res.dphi,    float).reshape(Nx+1, Ny+1, N_KL, -1)
-
-g_phase = adjoint_grad_all_phase(
-    np.zeros_like(U_obs), Mu_hist, SOLID, MELT,
-    K_SG_K1=K_SG_K1, M_SG_M1=M_SG_M1,
-    forcing_param_grads_numpy=forcing_param_grads_numpy,
-    spatial_op=spatial_op_obs, freeze_phase=False, vap_prop = VAP
-)
-g_kappa_adj = compute_adjoint_grad_kappa_phase_matrixfree_all(
-    np.zeros_like(U_obs), Mu_hist,
-    SOLID, MELT, VAP,
-    eigvals_trunc=eigvals_trunc,
-    eigvecs_reshaped=eigvecs_grid,
-    dlambda_dkappa=dlambda_all,
-    dphi_dkappa=dphi_all_grid,
-    local_params=params,    # ← ADD
-    freeze_phase=False,
-    include_forcing_dphi=True,
-    coo=_diff.coo
-)
 #from plots_adjoint import generate_adjoint_plots
  
 #generate_adjoint_plots(
@@ -6452,11 +6422,37 @@ def run_inf():
         print("current kappa: ", theta_kappa_cur)
         print("current therm: ", therm_cur)
 
-                                                                                                                                                    
-def run_inf_lbfgs(mean_round_iters=150, var_round_iters=20, prior=None):
+
+
+validate_depth_adjoint_fd(dx,dy,U_obs,
+    run_forward,
+    U0,
+    SOLID, MELT, VAP,
+    ell, theta_kappa_init,
+    Nx, Ny, Ly, num_nodes, P, T_abl,
+    adjoint_one_step,
+    adjoint_grad_all_phase,
+    forcing_param_grads_numpy,
+    _clear_all_kappa_caches,#
+    bc_idx, params,
+    M_bc, K_bc, solve_A,    
+    K_SG_K0, K_SG_K1, M_SG_M0, M_SG_M1,
+    sigma2_obs_hist,
+    spatial_op_obs, h_obs_hist, kappa_param=kappa_param_init,
+    compute_adjoint_grad_kappa_fn=compute_adjoint_grad_kappa_phase_matrixfree_all,
+    Lx=Lx,
+    N_KL=N_KL, sigma_d = sigma_d, eps_smooth=eps_smooth,sigma_field= sigma_field, mean_only=False)
+def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
+                  skip_stage1=False):
     from scipy.optimize import minimize
 
-    OBJ_SCALE = 1e-8   # rescale so gradients are O(1e-1) — allows L-BFGS-B line search to take proper steps
+    OBJ_SCALE  = 1e-8   # Stage 1: gradients O(1e7) → scaled to O(1e-1)
+    OBJ_SCALE2 = 5e-3   # Stage 2: uniform objective scale
+    # Per-parameter reparametrisation for Stage 2.
+    # u = x_log * PARAM_SCALE2 are the optimizer's coordinates; x_log = u / PARAM_SCALE2.
+    # Chosen so |g_log / PARAM_SCALE2| ≈ equal for all 5 params.
+    # Derived from first-iteration gradient magnitudes: [~3, ~27, ~12, ~105, ~3].
+    PARAM_SCALE2 = np.array([1.0, 8.0, 4.0, 33.0, 1.0])
 
     VAP_base = {**VAP_obs,                                                                                                                                            
                 'rho_vap0': VAP['rho_vap0'],              
@@ -6575,7 +6571,7 @@ def run_inf_lbfgs(mean_round_iters=150, var_round_iters=20, prior=None):
             kappa_param=None,
             compute_adjoint_grad_kappa_fn=None,
             Lx=Lx, N_KL=N_KL, sigma_d=sigma_d, eps_smooth=eps_smooth,
-            run_fd_check=False, mean_only=True)
+            sigma_field=sigma_field, run_fd_check=False, mean_only=True)
 
         g_log = np.array([
             g_therm_adj.get('rho_vap0', 0.0) * rho0,
@@ -6618,7 +6614,7 @@ def run_inf_lbfgs(mean_round_iters=150, var_round_iters=20, prior=None):
                  iters           = np.array([d['iter']      for d in _stage1_log]),
                  J               = np.array([d['J']          for d in _stage1_log]),
                  rho_vap0        = np.array([d['rho_vap0']   for d in _stage1_log]),
-                 f0_v            = np.array([d['f0_m']        for d in _stage1_log]),
+                 f0_m            = np.array([d['f0_m']        for d in _stage1_log]),
                  g               = np.array([d['g']           for d in _stage1_log]),
                  depth_traj      = np.array([d['depth_traj']  for d in _stage1_log]),
                  var_traj        = np.array([d['var_traj']    for d in _stage1_log]),
@@ -6635,21 +6631,46 @@ def run_inf_lbfgs(mean_round_iters=150, var_round_iters=20, prior=None):
 
         return float(J) * OBJ_SCALE, g_log * OBJ_SCALE
 
-    print("\n=== Stage 1: mean-only, rho_vap0 + f0_m ===")
-    res1 = minimize(
-        obj_mean,
-        x0=np.log([VAP_base['rho_vap0'], MELT['f0']]),
-        jac=True, method='L-BFGS-B',
-        bounds=[
-            (np.log(1e9),   np.log(3e9)),   # rho_vap0
-            (np.log(0.45),  np.log(0.95)),    # f0_v
-        ],
-        options={'maxiter': mean_round_iters, 'ftol': 1e-20, 'gtol': 1e-8, 'maxcor':5})
+    if skip_stage1:
+        # ── Load Stage 1 result from saved log ──────────────────────────────
+        import os
+        if os.path.exists("stage1_log.npz"):
+            _s1 = np.load("stage1_log.npz")
+            if len(_s1['rho_vap0']) > 0:
+                # use the last logged iterate
+                _f0_key = 'f0_m' if 'f0_m' in _s1 else 'f0_v'
+                rho_vap0_fixed = float(_s1['rho_vap0'][-1])
+                f0_m_fixed     = float(_s1[_f0_key][-1])
+                _src = "last iterate in stage1_log.npz"
+            else:
+                # npz exists but is empty (run crashed before first eval)
+                # fall back to the truth scalars stored in the file
+                rho_vap0_fixed = float(_s1['rho_truth'])
+                f0_m_fixed     = float(_s1['f0_truth'])
+                _src = "truth scalars in stage1_log.npz (log was empty)"
+        else:
+            raise FileNotFoundError(
+                "skip_stage1=True but stage1_log.npz not found — run Stage 1 first.")
+        res1 = None
+        print(f"\n=== Stage 1: SKIPPED ({_src}) ===")
+        print(f"  rho_vap0={rho_vap0_fixed:.4e}  (truth {VAP_obs['rho_vap0']:.2e})")
+        print(f"  f0_m    ={f0_m_fixed:.4f}       (truth {MELT_obs['f0']:.4f})")
+    else:
+        print("\n=== Stage 1: mean-only, rho_vap0 + f0_m ===")
+        res1 = minimize(
+            obj_mean,
+            x0=np.log([VAP_base['rho_vap0'], MELT['f0']]),
+            jac=True, method='L-BFGS-B',
+            bounds=[
+                (np.log(1e9),   np.log(3e9)),   # rho_vap0
+                (np.log(0.45),  np.log(0.95)),  # f0_v
+            ],
+            options={'maxiter': mean_round_iters, 'ftol': 1e-20, 'gtol': 1e-8, 'maxcor':5})
 
-    rho_vap0_fixed = float(np.exp(res1.x[0]))
-    f0_m_fixed     = float(np.exp(res1.x[1]))
-    print(f"  Stage 1 done: rho_vap0={rho_vap0_fixed:.4e}  f0_m={f0_m_fixed:.4f}"
-          f"  J={res1.fun/OBJ_SCALE:.4e}  {res1.message}")
+        rho_vap0_fixed = float(np.exp(res1.x[0]))
+        f0_m_fixed     = float(np.exp(res1.x[1]))
+        print(f"  Stage 1 done: rho_vap0={rho_vap0_fixed:.4e}  f0_m={f0_m_fixed:.4f}"
+              f"  J={res1.fun/OBJ_SCALE:.4e}  {res1.message}")
 
     np.savez("stage1_log.npz",
              iters           = np.array([d['iter']      for d in _stage1_log]),
@@ -6665,11 +6686,31 @@ def run_inf_lbfgs(mean_round_iters=150, var_round_iters=20, prior=None):
              f0_truth        = float(MELT_obs['f0']))
     print("  Saved stage1_log.npz")
 
-    # ── Stage 2: mean+variance, rho_vap1 + kappa free ────────────────────────
-    def obj_var(x_log):
+    # ── Stage 2: mean+variance, rho_vap1 + kappa free (f1_m fixed) ─────────────
+    _stage2_log = []
+
+    _depth2_csv = "stage2_depth_log.csv"
+    _depth2_header = (
+        "# h_obs,"    + ",".join(f"{v:.6e}" for v in h_obs_hist) + "\n"
+        "# sigma2_obs," + ",".join(f"{v:.6e}" for v in sigma2_obs_hist) + "\n"
+    )
+    _depth2_col_headers = (
+        "iter,rho_vap1,kappa_surface,kappa_deep,y_trans,width,"
+        + ",".join(f"h_pred_t{t}" for t in range(_T)) + ","
+        + ",".join(f"var_pred_t{t}" for t in range(_T)) + "\n"
+    )
+    with open(_depth2_csv, "w") as _fh2:
+        _fh2.write(_depth2_header)
+        _fh2.write(_depth2_col_headers)
+
+    def obj_var(u):
+        # u = x_log * PARAM_SCALE2  (scaled coordinates seen by the optimizer)
+        # x_log = [log(rho_vap1), log(kappa_surface), log(kappa_deep),
+        #          log(y_trans), log(width)]  — 5 parameters
+        x_log = u / PARAM_SCALE2
         _clear_all_kappa_caches()
         rho1        = float(np.exp(x_log[0]))
-        theta_kappa = np.exp(x_log[1:])
+        theta_kappa = np.exp(x_log[1:])          # shape (4,)
         kappa_cur   = SigmoidLayeredKappa(
             Ny=Ny, Ly=Ly,
             kappa_surface=float(theta_kappa[0]),
@@ -6677,75 +6718,120 @@ def run_inf_lbfgs(mean_round_iters=150, var_round_iters=20, prior=None):
             y_transition=float(theta_kappa[2]),
             width=float(theta_kappa[3])
         )
-        VAP_cur = {**VAP_base, 'rho_vap0': rho_vap0_fixed, 'rho_vap1': rho1}
-        J, g_therm_adj, g_kappa_adj, _, _ = validate_depth_adjoint_fd(
+        VAP_cur  = {**VAP_base, 'rho_vap0': rho_vap0_fixed, 'rho_vap1': rho1}
+        MELT_cur = {**MELT_obs, 'f0': f0_m_fixed}   # f1 fixed at obs value
+
+        J, g_therm_adj, g_kappa_adj, mean_depth, var_depth = validate_depth_adjoint_fd(
             dx, dy, U_obs,
             run_forward, U0,
-            SOLID_obs, MELT_obs, VAP_cur,                 
+            SOLID_obs, MELT_cur, VAP_cur,
             ell, theta_kappa,
             Nx, Ny, Ly, num_nodes, P, T_abl,
-            adjoint_one_step,                                                                                                                                         
+            adjoint_one_step,
             adjoint_grad_all_phase,
-            forcing_param_grads_numpy,                                                                                                                                
-            _clear_all_kappa_caches,                      
+            forcing_param_grads_numpy,
+            _clear_all_kappa_caches,
             bc_idx, params,
-            M_bc, K_bc, solve_A,                                                                                                                                      
+            M_bc, K_bc, solve_A,
             K_SG_K0, K_SG_K1, M_SG_M0, M_SG_M1,
-            sigma2_obs_hist,                                                                                                                                          
-            spatial_op_obs, h_obs_hist,                   
-            kappa_param=kappa_cur,                                                                                                                                    
+            sigma2_obs_hist,
+            spatial_op_obs, h_obs_hist,
+            kappa_param=kappa_cur,
             compute_adjoint_grad_kappa_fn=compute_adjoint_grad_kappa_phase_matrixfree_all,
-            Lx=Lx, N_KL=N_KL, sigma_d=sigma_d, eps_smooth=eps_smooth,                                                                                                 
-            run_fd_check=False, mean_only=False)                                                                                                                      
+            Lx=Lx, N_KL=N_KL, sigma_d=sigma_d, eps_smooth=eps_smooth,
+            sigma_field=sigma_field, run_fd_check=False, mean_only=False)
 
-        # chain rule for all 5 parameters
+        # log-space chain rule: d(J)/d(log theta) = d(J)/d(theta) * theta
         g_log = np.concatenate([
-                [g_therm_adj.get('rho_vap1', 0.0) * rho1],
-                g_kappa_adj * theta_kappa
+            [g_therm_adj.get('rho_vap1', 0.0) * rho1],
+            g_kappa_adj * theta_kappa,
         ])
+        # scale-space chain rule: d(J)/du = d(J)/d(x_log) / PARAM_SCALE2
+        g_u = g_log / PARAM_SCALE2
+
         if prior is not None:
             theta_full = np.array([rho_vap0_fixed, rho1, *theta_kappa])
             nll_p, grad_p_theta = prior(theta_full)
-            J += nll_p
-            g_log += grad_p_theta[1:] * theta_full[1:]   # log-space chain rule, skip fixed rho_vap0
-        print("g_log", g_log)                                                                                                                             
+            J     += nll_p
+            # grad_p_theta indices: 0=rho_vap0(fixed), 1=rho_vap1, 2-5=kappa
+            g_log += grad_p_theta[1:] * theta_full[1:]
+            g_u = g_log / PARAM_SCALE2  # recompute after prior contribution
+
         print(f"  [var]  J={J:.4e}  rho_vap1={rho1:.4e} (truth {VAP_obs['rho_vap1']:.2e})"
-            f"  kappa={theta_kappa.round(3)}")                                                                                                                      
-        return float(J) * OBJ_SCALE, g_log * OBJ_SCALE
-                                                                                                                                                                    
-    x0_var = np.log([                                                                                                                                                 
-        VAP_base['rho_vap1'],
-        theta_kappa_init[0],   # kappa_surface                                                                                                                         
-        theta_kappa_init[1],   # kappa_deep                
-        theta_kappa_init[2],   # y_trans
-        theta_kappa_init[3],   # width                                                                                                                                 
+              f"  kappa={theta_kappa.round(3)}"
+              f"  g_log={g_log.round(4)}  g_u={g_u.round(4)}")
+
+        _stage2_log.append({
+            'iter':        len(_stage2_log) + 1,
+            'J':           float(J),
+            'rho_vap1':    rho1,
+            'theta_kappa': theta_kappa.copy(),
+            'g':           g_log.copy(),
+            'depth_traj':  mean_depth.copy(),
+            'var_traj':    var_depth.copy(),
+        })
+
+        with open(_depth2_csv, "a") as _fh2:
+            _fh2.write(
+                f"{len(_stage2_log)},{rho1:.6e},"
+                + f"{theta_kappa[0]:.6e},{theta_kappa[1]:.6e},"
+                + f"{theta_kappa[2]:.6e},{theta_kappa[3]:.6e},"
+                + ",".join(f"{v:.6e}" for v in mean_depth) + ","
+                + ",".join(f"{v:.6e}" for v in var_depth) + "\n"
+            )
+
+        np.savez("stage2_log.npz",
+                 iters           = np.array([d['iter']        for d in _stage2_log]),
+                 J               = np.array([d['J']            for d in _stage2_log]),
+                 rho_vap1        = np.array([d['rho_vap1']     for d in _stage2_log]),
+                 theta_kappa     = np.array([d['theta_kappa']  for d in _stage2_log]),
+                 g               = np.array([d['g']            for d in _stage2_log]),
+                 depth_traj      = np.array([d['depth_traj']   for d in _stage2_log]),
+                 var_traj        = np.array([d['var_traj']     for d in _stage2_log]),
+                 h_obs_hist      = h_obs_hist,
+                 sigma2_obs_hist = sigma2_obs_hist,
+                 rho_vap0_fixed  = float(rho_vap0_fixed),
+                 f0_m_fixed      = float(f0_m_fixed),
+                 rho_vap1_truth  = float(VAP_obs['rho_vap1']),
+                 kappa_truth     = theta_kappa_obs.copy())
+
+        with open("stage2_log.csv", "w") as _f2:
+            _f2.write(f"# rho_vap1_truth={float(VAP_obs['rho_vap1']):.6e}\n")
+            _f2.write(f"# rho_vap0_fixed={float(rho_vap0_fixed):.6e}  f0_m_fixed={float(f0_m_fixed):.6f}\n")
+            _f2.write("iter,J,rho_vap1,kappa_surf,kappa_deep,y_trans,width,"
+                      "g_rho1,g_ks,g_kd,g_yt,g_w\n")
+            for d in _stage2_log:
+                tk = d['theta_kappa']
+                gv = d['g']
+                _f2.write(
+                    f"{d['iter']},{d['J']:.6e},{d['rho_vap1']:.6e},"
+                    f"{tk[0]:.6e},{tk[1]:.6e},{tk[2]:.6e},{tk[3]:.6e},"
+                    f"{gv[0]:.4e},{gv[1]:.4e},{gv[2]:.4e},{gv[3]:.4e},{gv[4]:.4e}\n"
+                )
+
+        return float(J) * OBJ_SCALE2, g_u * OBJ_SCALE2
+
+    print("\n=== Stage 2: rho_vap1 + kappa (f1_m fixed at obs) ===")
+    x_log0_stage2 = np.log([
+        VAP['rho_vap1'],          # rho_vap1 starting point
+        *theta_kappa_init,        # kappa starting point [surf, deep, y_trans, width]
     ])
-    bounds_var = [
-        (np.log(1e5),       np.log(1e12)),       # rho_vap1
-        (np.log(20),        np.log(150)),         # kappa_surface
-        (np.log(20),        np.log(150)),         # kappa_deep
-        (np.log(0.0*Ly),    np.log(Ly)),      # y_trans
-        (np.log(0.01*Ly),   np.log(2.0*Ly)),      # width
-    ]
-
-    print("\n=== Stage 2: mean+variance, rho_vap1 + kappa ===")
+    x0_stage2 = x_log0_stage2 * PARAM_SCALE2  # transform to scaled coordinates
     res2 = minimize(
-        obj_var, x0_var, jac=True, method='L-BFGS-B',
-        bounds=bounds_var,
-        options={'maxiter': var_round_iters, 'ftol': 1e-15, 'gtol': 1e-8})
-
-    theta2 = np.exp(res2.x)
-    print(f"\nFinal result:")
-    print(f"  rho_vap0   = {rho_vap0_fixed:.4e}  (truth {VAP_obs['rho_vap0']:.2e})")
-    print(f"  f0_v       = {f0_m_fixed:.4f}      (truth {VAP_obs['f0']:.4f})")
-    print(f"  rho_vap1   = {theta2[0]:.4e}  (truth {VAP_obs['rho_vap1']:.2e})")
-    print(f"  kappa_surf = {theta2[1]:.4e}  (truth {theta_kappa_obs[0]:.2e})")
-    print(f"  kappa_deep = {theta2[2]:.4e}  (truth {theta_kappa_obs[1]:.2e})")
-    print(f"  y_trans    = {theta2[3]:.4e}  (truth {theta_kappa_obs[2]:.2e})")
-    print(f"  width      = {theta2[4]:.4e}  (truth {theta_kappa_obs[3]:.2e})")
-    print(f"  J_final    = {res2.fun/OBJ_SCALE:.4e}  {res2.message}")
-    return {'stage1': res1, 'stage2': res2}
-
+        obj_var,
+        x0=x0_stage2,
+        jac=True, method='L-BFGS-B',
+        bounds=[
+            (np.log(236640000)     * PARAM_SCALE2[0], np.log(236640000)    * PARAM_SCALE2[0]),
+            (np.log(15.0)    * PARAM_SCALE2[1], np.log(450.0)  * PARAM_SCALE2[1]),
+            (np.log(15.0)    * PARAM_SCALE2[2], np.log(450.0)  * PARAM_SCALE2[2]),
+            (np.log(0.0*Ly)  * PARAM_SCALE2[3], np.log(Ly)     * PARAM_SCALE2[3]),
+            (np.log(0.1*Ly) * PARAM_SCALE2[4], np.log(0.1*Ly)     * PARAM_SCALE2[4]),
+        ],
+        options={'maxiter': var_round_iters, 'ftol': 1e-20, 'gtol': 1e-8, 'maxcor': 5})
+    x_log_final = res2.x / PARAM_SCALE2  # recover log-space params
+    print(f"  Stage 2 done: rho_vap1={np.exp(x_log_final[0]):.4e} (truth {VAP_obs['rho_vap1']:.2e})"
+          f"  kappa={np.exp(x_log_final[1:]).round(2)}  J={res2.fun/OBJ_SCALE2:.4e}  {res2.message}")
 
 def run_J_walk():
     """
@@ -6832,27 +6918,89 @@ def run_J_walk():
     return results
 
 
-run_inf_lbfgs()
-validate_depth_adjoint_fd(dx,dy,U_obs,
-    run_forward,
-    U0,
-    SOLID, MELT, VAP,
-    ell, theta_kappa_init,
-    Nx, Ny, Ly, num_nodes, P, T_abl,
-    adjoint_one_step,
-    adjoint_grad_all_phase,
-    forcing_param_grads_numpy,
-    _clear_all_kappa_caches,#
-    bc_idx, params,
-    M_bc, K_bc, solve_A,    
-    K_SG_K0, K_SG_K1, M_SG_M0, M_SG_M1,
-    sigma2_obs_hist,
-    spatial_op_obs, h_obs_hist, kappa_param=kappa_param_init,
-    compute_adjoint_grad_kappa_fn=compute_adjoint_grad_kappa_phase_matrixfree_all,
-    Lx=Lx,
-    N_KL=N_KL, sigma_d = sigma_d, eps_smooth=eps_smooth,mean_only=True)
+def run_rho1_profile(rho_vap0_fixed, f0_m_fixed, n_pts=15):
+    """
+    1D scan of J(rho_vap1) with all other Stage 2 params held fixed.
+    Two sweeps:
+      (a) kappa fixed at starting values  — reveals whether J has a spurious
+          minimum at high rho_vap1 when kappa is wrong (genuine degeneracy)
+      (b) kappa fixed at truth values     — shows the clean landscape when
+          kappa is correct (should give a minimum near true rho_vap1)
+
+    Forward-only: no adjoint computed.  Saves rho1_profile.npz.
+    """
+    from depth_objective import softmin_depth, _trap_weights
+
+    beta   = 0.005
+    y_nodes = np.linspace(0.0, Ly, Ny + 1)
+    wz      = _trap_weights(y_nodes)
+
+    VAP_base  = {**VAP_obs, 'rho_vap0': rho_vap0_fixed}
+    MELT_cur  = {**MELT_obs, 'f0': f0_m_fixed}
+    rho1_grid = np.exp(np.linspace(np.log(5e7), np.log(8e8), n_pts))
+
+    def _J_forward(U_hist):
+        """Stage 2 objective (variance residual only) from a forward trajectory."""
+        J = 0.0
+        mean_d = np.zeros(time_steps)
+        var_d  = np.zeros(time_steps)
+        for t in range(1, time_steps):
+            u_t       = U_hist[t]
+            u_mean_2d = u_t[:num_nodes].reshape(Nx + 1, Ny + 1)
+            h_pred, _, w_softmin, _, dH = softmin_depth(
+                u_mean_2d, y_nodes, T_abl, eps_smooth, beta)
+            mean_d[t] = float(h_pred)
+            g_flat    = (w_softmin[:, np.newaxis] * wz[np.newaxis, :] * dH).ravel()
+            U_modes   = u_t.reshape(P, num_nodes)
+            sigma2_pred = float(np.sum((U_modes[1:] @ g_flat) ** 2))
+            r_var     = sigma2_pred - float(sigma2_obs_hist[t])
+            J        += 0.5 * r_var ** 2 * 1e10
+            var_d[t]  = sigma2_pred
+        return J, mean_d, var_d
+
+    configs = [
+        ('x0_kappa',    theta_kappa_init, kappa_param_init,  'kappa fixed at x0'),
+        ('truth_kappa', theta_kappa_obs,  kappa_param_obs,   'kappa fixed at truth'),
+    ]
+
+    print("\n" + "="*65)
+    print("  rho_vap1 PROFILE SCAN  (forward-only, Stage 2 objective)")
+    print(f"  rho_vap0_fixed={rho_vap0_fixed:.4e}  f0_m_fixed={f0_m_fixed:.4f}")
+    print(f"  truth rho_vap1={VAP_obs['rho_vap1']:.4e}")
+    print("="*65)
+
+    all_J = {}
+    for key, theta_kappa, kappa_param, desc in configs:
+        _clear_all_kappa_caches()
+        Js = []
+        print(f"\n  [{desc}]")
+        print(f"  {'rho_vap1':>12}  {'J':>14}  {'note'}")
+        for rho1 in rho1_grid:
+            VAP_cur = {**VAP_base, 'rho_vap1': float(rho1)}
+            U_hist, *_ = run_forward(U0, SOLID_obs, MELT_cur, VAP_cur, ell,
+                                     theta_kappa=theta_kappa,
+                                     kappa_param=kappa_param)
+            J, _, _ = _J_forward(U_hist)
+            Js.append(float(J))
+            note = ' ← truth' if abs(rho1 - VAP_obs['rho_vap1']) / VAP_obs['rho_vap1'] < 0.05 else ''
+            print(f"  {rho1:>12.4e}  {J:>14.6e}{note}")
+        all_J[key] = np.array(Js)
+
+    np.savez('rho1_profile.npz',
+             rho1_grid      = rho1_grid,
+             J_x0_kappa     = all_J['x0_kappa'],
+             J_truth_kappa  = all_J['truth_kappa'],
+             rho1_x0        = float(VAP['rho_vap1']),
+             rho1_truth     = float(VAP_obs['rho_vap1']),
+             rho_vap0_fixed = float(rho_vap0_fixed),
+             f0_m_fixed     = float(f0_m_fixed))
+    print("\n  Saved rho1_profile.npz")
+    print("="*65)
+
+#run_rho1_profile(rho_vap0_fixed=1.366400e+09, f0_m_fixed=0.8)
 
 
+run_inf_lbfgs(skip_stage1=True, var_round_iters=150, prior=prior_full)
 
 #run_inf()
 
@@ -7047,4 +7195,3 @@ print("\nSaved hessian_results.npz")
 #   run_ridge_diagnostics(globals_dict=globals(), do_scan=True, n_rho=8, n_f0=8)
 exec(open("scan_stage1_ridge.py").read())
 run_ridge_diagnostics(globals_dict=globals(), do_scan=False)   # GN only first
-

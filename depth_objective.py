@@ -377,7 +377,8 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
                                kappa_param=None,           # LayeredKappa / SmoothKappa instance
                                compute_adjoint_grad_kappa_fn=None,  # = compute_adjoint_grad_kappa_phase_matrixfree
                                Lx=None,    # domain width (needed to build SPDEKLDifferentiator)
-                               N_KL=None,  # number of KL modes, 
+                               N_KL=None,  # number of KL modes,
+                               sigma_field=1.0,  # marginal std of KL field; scales eigenvalues as sigma_field^2
                                run_fd_check = True , mean_only=True
                                ):
     U_obs = U_obs_passed.copy()
@@ -467,9 +468,9 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
         if hasattr(_diff.kappa_param, 'kappa0') and theta_kappa_arr.size == 1:
             theta_kappa_arr = np.array([theta_kappa_arr[0], _diff.kappa_param.strength], dtype=float)
         _res = _diff.derivatives(theta_kappa_arr)
-        eigvals_trunc = np.asarray(_res.eigvals, float)      # (N_KL,)
-        eigvecs_reshaped = np.asarray(_res.eigvecs, float)   # (n, N_KL)
-        dlambda_all = np.asarray(_res.dlambda, float)        # (N_KL, n_layers)
+        eigvals_trunc = sigma_field**2 * np.asarray(_res.eigvals, float)  # (N_KL,)
+        eigvecs_reshaped = np.asarray(_res.eigvecs, float)                # (n, N_KL)
+        dlambda_all = sigma_field**2 * np.asarray(_res.dlambda, float)   # (N_KL, n_layers)
         dphi_all = np.asarray(_res.dphi, float)              # (n, N_KL, n_layers)
 
         # Reshape eigvecs to (Nx+1, Ny+1, N_KL) — vertex-centred grid
@@ -514,8 +515,8 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
     if run_fd_check==True:
         results = {}
         param_pairs = [
-            ('f0_m', 'f0', 'melt'),
-            ('rho_vap0', 'rho_vap0', 'vap'),
+            ('rho_melt1', 'rho_melt1', 'melt'),
+            ('rho_vap1', 'rho_vap1', 'vap'),
         ]
         for param_name, key, which in param_pairs:
             g_adj = float(g_phase[param_name])
@@ -531,8 +532,10 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
                 mp[key] = base + h_step; mm[key] = base - h_step
             else:  # 'vap'
                 vp[key] = base + h_step; vm[key] = base - h_step
-
-            g_fd = (_J_perturbed(sp, mp, vp, U0_clean) - _J_perturbed(sm, mm, vm, U0_clean)) / (2 * h_step)
+            J_p = _J_perturbed(sp, mp, vp, U0_clean)
+            J_m = _J_perturbed(sm, mm, vm, U0_clean)
+            print(J_p, J_m)
+            g_fd = (J_p - J_m) / (2 * h_step)
             denom = max(abs(g_adj), abs(g_fd), 1e-30)
             rel_err = abs(g_adj - g_fd) / denom
             status = "✓" if rel_err < 1e-2 else ("⚠" if rel_err < 1e-1 else "✗")

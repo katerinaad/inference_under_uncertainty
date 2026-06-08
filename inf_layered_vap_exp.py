@@ -56,8 +56,8 @@ f1 = 0.0
 rhoL = 0
 #rho_vap0 = 1e9    # latent heat of vaporisation (J/m^3); set >0 to activate vapour transition
 #rho_vap1 = 1e7
-T_final = 12.0
-dt = 0.075
+T_final = 14.0
+dt = 0.3
 N_KL = 40 # number of KL terms
 P = N_KL + 1     # total chaos modes (0th = mean, 1...N_KL = KL terms)
 dx, dy = Lx/Nx, Ly/Ny
@@ -75,21 +75,21 @@ sigma_d = 1e-10
 kappa_param_obs = SigmoidLayeredKappa(
     Ny=Ny,
     Ly=Ly,
-    kappa_surface=80.0,    # short correlation near surface (weathered/fractured)
+    kappa_surface=280.0,    # short correlation near surface (weathered/fractured)
     kappa_deep=80.0,       # longer correlation at depth (competent granite)
     y_transition=0.9*Ly,   # transition at 60% depth
-    width=0.1*Ly,          # transition zone ~10% of domain width
+    width=0.01*Ly,          # transition zone ~10% of domain width
     )
 kappa_param_init = SigmoidLayeredKappa(
     Ny=Ny,
     Ly=Ly,
-    kappa_surface=280.0,    # short correlation near surface (weathered/fractured)
+    kappa_surface=80.0,    # short correlation near surface (weathered/fractured)
     kappa_deep=80.0,       # longer correlation at depth (competent granite)
     y_transition=0.9*Ly,   # transition at 60% depth
-    width=0.1*Ly,          # transition zone ~10% of domain width
+    width=0.01*Ly,          # transition zone ~10% of domain width
     )
-theta_kappa_init = np.array([280.0,80.0, 0.9*Ly,0.1*Ly])
-theta_kappa_obs = np.array([80.0,80.0, 0.9*Ly,0.1*Ly])
+theta_kappa_init = np.array([80.0,80.0, 0.9*Ly,0.01*Ly])
+theta_kappa_obs = np.array([80.0,80.0, 0.9*Ly,0.01*Ly])
 np.random.seed(0)
 #Generate GMRF  and assemble SG matrices
 # Generate the GMRF
@@ -108,9 +108,10 @@ T_melt_hi =1573.0
 Delta_melt = 150.0   # smoothing width
 
 # ---- solid / melt parameter sets ----
-SOLID =dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*100, f0=1.0, f1=0.0)
-MELT  =  dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*1000, f0=0.8, f1=0.0,
-             rho_melt0=1.5e9, rho_melt1=1.5e8)
+SOLID =dict(k0=2.0,  k1=0.0, m0=2650 * 1050, m1= 2650*100*0, f0=1.0, f1=0.0)
+MELT  =  dict(k0=2.0,  k1=0.0, m0=2650 * 1050, m1= 2650*1000*0, f0=0.8, f1=0.0,
+             rho_melt0=1.5e9, rho_melt1=1.5e8,
+             rho_melt1_s=0.5e8, rho_melt1_d=3.0e8)
 #SOLID_obs = dict(k0=2.0,  k1=0.0, m0=2.3e6, m1=2e5, f0=1.0, f1=0.0)
 #MELT_obs  = dict(k0=2.0,  k1=0.0, m0=2.0e6, m1=2e5, f0=1.0, f1=0.0)
 # ---- vapour parameter set (properties above the vaporisation front) ----
@@ -118,24 +119,47 @@ MELT  =  dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*1000, f0=0.8, f1=0.0,
 
 SOLID_obs = dict(
     k0  = 2.0,              # W/(m·K) — Gokhale Table 1
-    k1  = 2.0,
+    k1  = 0.0,
     m0  = 2650 * 1050,      # 2.7825e6 J/(m³·K) — rho*Cp solid
-    m1  = 2650*100,
+    m1  = 2650*100*0,
     f0  = 1.0,             # 0.75 * 0.83 — transmissivity * absorptivity correction
     f1  = 0.0,
 )
 
 MELT_obs = dict(
     k0  = 2.0,              # W/(m·K) — same as solid in Gokhale Table 1
-    k1  = 2.0,
+    k1  = 0.0,
     m0  = 2650 * 1050,      # 4.1605e6 J/(m³·K) — rho*Cp melt
-    m1  = 2650 * 100,
+    m1  = 2650 * 100*0,
     f0  = 0.8,             # same absorptivity correction as solid
-    f1  = 0.0, rho_melt0=1.5e9, rho_melt1=1.5e8
+    f1  = 0.0, rho_melt0=1.5e9, rho_melt1=0.0,  # rho_melt1 overwritten below
+    rho_melt1_s = 3.0e8,   # surface value for sigmoid field
+    rho_melt1_d = 0.5e8,   # deep value for sigmoid field
+)
+
+# ── layered rho_melt1 parametrisation ─────────────────────────────────────────
+# Element y-centres (computed here; Nx,Ny,dy are defined above at line 63)
+_y_elem_c = np.arange(Ny) * dy + 0.5 * dy   # (Ny,)
+
+def _sigmoid_rho_field(melt_dict, y_trans, width):
+    """Return sigmoid-layered rho_melt1 field on element centres, shape (Ny,).
+    Reads rho_melt1_s and rho_melt1_d from melt_dict."""
+    rho_surf = melt_dict["rho_melt1_s"]
+    rho_deep = melt_dict["rho_melt1_d"]
+    z   = (_y_elem_c - y_trans) / width
+    sig = 1.0 / (1.0 + np.exp(-np.clip(z, -100, 100)))
+    return rho_surf + (rho_deep - rho_surf) * sig
+
+_rho_melt1_surf_obs = MELT_obs["rho_melt1_s"]
+_rho_melt1_deep_obs = MELT_obs["rho_melt1_d"]
+
+# Build rho_melt1 field from the melt dict values
+MELT_obs["rho_melt1"] = _sigmoid_rho_field(
+    MELT_obs, theta_kappa_obs[2], theta_kappa_obs[3]
 )
 
 # ---- vapour parameter set ----
-VAP = dict(k0=0.26, k1=0.01, m0=2650  * 1570, m1=2650  * 15, f0=0.2, f1=0.0,
+VAP = dict(k0=0.26, k1=0.01, m0=2650  * 1570, m1=2650  * 15*0, f0=0.2, f1=0.0,
     rho_vap0 =  1366400000,
     rho_vap1 = 1366400000*0 ,)
 
@@ -4439,6 +4463,7 @@ def adjoint_grad_all_phase(
     forcing_param_grads_numpy, spatial_op=None,
     freeze_phase=False,
     vap_prop=None,
+    theta_kappa=None,
 ):
     """
     Gradients for solid/melt/vapour parameters in the new phase formulation.
@@ -4466,6 +4491,12 @@ def adjoint_grad_all_phase(
     if vap_prop is None:
         vap_prop = melt_prop
 
+    if (theta_kappa is not None
+            and 'rho_melt1_s' in melt_prop and 'rho_melt1_d' in melt_prop):
+        tk = np.asarray(theta_kappa, float)
+        melt_prop = {**melt_prop,
+                     'rho_melt1': _sigmoid_rho_field(melt_prop, float(tk[2]), float(tk[3]))}
+
     g = dict(
         k0_s=0.0, k0_m=0.0,
         k1_s=0.0, k1_m=0.0,
@@ -4477,7 +4508,8 @@ def adjoint_grad_all_phase(
         m0_v=0.0, m1_v=0.0,
         f0_v=0.0, f1_v=0.0,
         rho_vap0 = 0.0, rho_vap1 = 0.0,
-        rho_melt0 = 0.0, rho_melt1 = 0.0
+        rho_melt0 = 0.0, rho_melt1 = 0.0,
+        rho_melt1_s = 0.0, rho_melt1_d = 0.0,
     )
 
     if freeze_phase:
@@ -4545,16 +4577,15 @@ def adjoint_grad_all_phase(
         m1_elem = (solid_prop["m1"]
                    + (melt_prop["m1"] - solid_prop["m1"]) * S_elem
                    + (vap_prop["m1"]  - melt_prop["m1"])  * V_elem
-                   +vap_prop["rho_vap1"] * dV_dT_elem_n )
+                   + vap_prop["rho_vap1"] * dV_dT_elem_n
+                   + melt_prop.get("rho_melt1", 0.0) * dS_dT_elem_n)
 
         if spatial_op is not None:
             spatial_op.update_weights(k1_elem, m1_elem)
 
             # VJP returns nodal gradient (num_nodes,) — convert to element space
             grad_k1_nodes = spatial_op.apply_K1_vjp_k1(u_np1, mu_n)
-            grad_k1_elem  = node_to_elem_mean(
-                grad_k1_nodes.reshape(Nx + 1, Ny + 1), Nx, Ny
-            )  # (Nx, Ny)
+            grad_k1_elem  = elem_to_node_vjp(grad_k1_nodes, Nx, Ny)  # (Nx, Ny)
 
             g["k1_s"] -= dt * float(np.sum(grad_k1_elem * w_s))
             g["k1_m"] -= dt * float(np.sum(grad_k1_elem * w_m))
@@ -4587,15 +4618,20 @@ def adjoint_grad_all_phase(
         # ------------------------------------------------------------------
         if spatial_op is not None:
             grad_m1_nodes = spatial_op.apply_M1_vjp_m1(du, mu_n)
-            grad_m1_elem  = node_to_elem_mean(
-                grad_m1_nodes.reshape(Nx + 1, Ny + 1), Nx, Ny
-            )  # (Nx, Ny)
+            grad_m1_elem  = elem_to_node_vjp(grad_m1_nodes, Nx, Ny)  # (Nx, Ny)
 
             g["m1_s"] -= float(np.sum(grad_m1_elem * w_s))
             g["m1_m"] -= float(np.sum(grad_m1_elem * w_m))
             g["m1_v"] -= float(np.sum(grad_m1_elem * w_v))
             g["rho_vap1"] -= float(np.sum(grad_m1_elem * w_rhovap1))
-            g["rho_melt1"] -= float(np.sum(grad_m1_elem * w_rhomelt1))
+            _rho_m1 = melt_prop.get("rho_melt1", 0.0)
+            if np.ndim(_rho_m1) > 0:
+                # spatially varying: accumulate (Ny,) field sensitivity summed over x
+                if "rho_melt1_field" not in g:
+                    g["rho_melt1_field"] = np.zeros(Ny)
+                g["rho_melt1_field"] -= np.sum(grad_m1_elem * w_rhomelt1, axis=0)
+            else:
+                g["rho_melt1"] -= float(np.sum(grad_m1_elem * w_rhomelt1))
 
         else:
             MU1_du = M_SG_M1 @ du
@@ -4634,6 +4670,15 @@ def adjoint_grad_all_phase(
         g["f1_s"] += (1.0 - Sbar) * gf1_eff
         g["f1_m"] += (Sbar - Vbar) * gf1_eff
         g["f1_v"] += Vbar          * gf1_eff
+
+    # Project rho_melt1_field -> rho_melt1_s, rho_melt1_d via sigmoid chain rule
+    if "rho_melt1_field" in g and theta_kappa is not None:
+        tk = np.asarray(theta_kappa, float)
+        y_elem_c = np.arange(Ny) * (Ly / Ny) + 0.5 * (Ly / Ny)
+        z_y   = (y_elem_c - tk[2]) / tk[3]
+        sig_y = 1.0 / (1.0 + np.exp(-np.clip(z_y, -100, 100)))
+        g["rho_melt1_s"] = float(np.sum(g["rho_melt1_field"] * (1.0 - sig_y)))
+        g["rho_melt1_d"] = float(np.sum(g["rho_melt1_field"] * sig_y))
 
     return g
 
@@ -4833,7 +4878,7 @@ def phi_one_step(t,
 
     def plot():
         plt.figure(figsize=(6, 5))
-        plt.imshow(f0_nodal[:num_nodes].reshape((Nx +1, Ny+1 )).T,
+        plt.imshow(m1_elem[:num_nodes].reshape((Nx , Ny )).T,
                     extent=[0, Lx, 0, Ly], origin='lower', cmap='magma')
         plt.colorbar(label='kW')
         plt.title('f0_nodal')
@@ -4968,6 +5013,26 @@ def node_to_elem_mean(coeff_nodes, Nx, Ny):
     """
     c = coeff_nodes.reshape(Nx + 1, Ny + 1)
     return 0.25 * (c[:-1, :-1] + c[1:, :-1] + c[:-1, 1:] + c[1:, 1:])
+
+
+def elem_to_node_vjp(grad_nodes, Nx, Ny):
+    """Exact adjoint of elem_to_node_weights.
+
+    elem_to_node_weights maps (Nx,Ny)->(num_nodes) by averaging elements around
+    each node: node[n] = sum_{e∋n} elem[e] / k_n.  Its adjoint E^T is:
+        (E^T g)[e] = sum_{n∈corners(e)} g[n] / k_n
+    which differs from node_to_elem_mean (which divides uniformly by 4) at
+    boundary nodes where k_n < 4.
+    """
+    Ny1 = Ny + 1
+    num_nodes = (Nx + 1) * Ny1
+    k_n = np.zeros(num_nodes)
+    ii, jj = np.meshgrid(np.arange(Nx), np.arange(Ny), indexing='ij')
+    ii, jj = ii.ravel(), jj.ravel()
+    for n in [ii*Ny1+jj, ii*Ny1+jj+1, (ii+1)*Ny1+jj, (ii+1)*Ny1+jj+1]:
+        np.add.at(k_n, n, 1)
+    scaled = (grad_nodes.ravel() / np.maximum(k_n, 1)).reshape(Nx + 1, Ny + 1)
+    return scaled[:-1, :-1] + scaled[1:, :-1] + scaled[:-1, 1:] + scaled[1:, 1:]
 def adjoint_one_step(t, solid_prop, melt_prop, vap_prop, U_np1, lam_np1, U_n,
                      M_SG_M0, M_SG_M1,
                      K_SG_K0, K_SG_K1,
@@ -5212,6 +5277,11 @@ def run_forward(U0,solid_prop,melt_prop,vap_prop,ell,frozen=False,theta_kappa=No
     Run forward in time and store U_history.
     theta_kappa: per-layer kappa values for SPDE field (replaces ell for KL modes)
     """
+    if (theta_kappa is not None
+            and 'rho_melt1_s' in melt_prop and 'rho_melt1_d' in melt_prop):
+        tk = np.asarray(theta_kappa, float)
+        melt_prop = {**melt_prop,
+                     'rho_melt1': _sigmoid_rho_field(melt_prop, float(tk[2]), float(tk[3]))}
     time0 = time.monotonic()
     K_SG_K0, K_SG_K1, M_SG_M0, M_SG_M1, K_kl_global, M_kl_global, kappa_params_update = build_SG_operators(sigma, ell, frozen, theta_kappa=theta_kappa, kappa_param=kappa_param)
     # Local snapshot: isolates this call's eigvecs from any subsequent build_SG_operators
@@ -6461,12 +6531,14 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
     from scipy.optimize import minimize
 
     OBJ_SCALE  = 1e-8   # Stage 1: gradients O(1e7) → scaled to O(1e-1)
-    OBJ_SCALE2 = 1.0    # Stage 2: no scaling — J and g_log are already O(1e-4 to 1e-2)
+    OBJ_SCALE2 = 1    # Stage 2: no scaling — J and g_log are already O(1e-4 to 1e-2)
     # Per-parameter reparametrisation for Stage 2.
     # u = x_log * PARAM_SCALE2 are the optimizer's coordinates; x_log = u / PARAM_SCALE2.
-    # With prior active, g_log at start ~ [O(0.1), 0.07, -0.03, 0.26, 0].
-    # PARAM_SCALE2 = 1 keeps u = log-space; g_u ~ O(0.05-0.2) for all params.
-    PARAM_SCALE2 = np.array([1.0, 1.0, 1.0, 1.0, 1.0])
+    # With H_0=I and step α=1, Δx_log_i = -g_log_i / PARAM_SCALE2_i².
+    # PARAM_SCALE2_i = sqrt(|g_log_i| / 0.1) gives a 10% first step per parameter.
+    # Derived from observed initial gradients (rho_s, rho_d, kap_s, kap_d, y_tr, wid):
+    _g_log_init = np.array([1.66e-7, 2.61e-6, 2.34e-6, 2.76e-6, 2.31e-6, 1.37e-7])
+    PARAM_SCALE2 = np.sqrt(_g_log_init / 0.1)
 
     VAP_base = {**VAP_obs,                                                                                                                                            
                 'rho_vap0': VAP['rho_vap0'],              
@@ -6703,7 +6775,7 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
         "# sigma2_obs," + ",".join(f"{v:.6e}" for v in sigma2_obs_hist) + "\n"
     )
     _depth2_col_headers = (
-        "iter,rho_melt1,kappa_surface,kappa_deep,y_trans,width,"
+        "iter,rho_melt1_surf,rho_melt1_deep,kappa_surface,kappa_deep,y_trans,width,"
         + ",".join(f"h_pred_t{t}" for t in range(_T)) + ","
         + ",".join(f"var_pred_t{t}" for t in range(_T)) + "\n"
     )
@@ -6713,21 +6785,32 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
 
     def obj_var(u):
         # u = x_log * PARAM_SCALE2  (scaled coordinates seen by the optimizer)
-        # x_log = [log(rho_melt1), log(kappa_surface), log(kappa_deep),
-        #          log(y_trans), log(width)]  — 5 parameters
+        # x_log = [log(rho_melt1_surf), log(rho_melt1_deep),
+        #          log(kappa_surface), log(kappa_deep),
+        #          log(y_trans), log(width)]  — 6 parameters
         x_log = u / PARAM_SCALE2
         _clear_all_kappa_caches()
-        rho_melt1   = float(np.exp(x_log[0]))
-        theta_kappa = np.exp(x_log[1:])          # shape (4,)
-        kappa_cur   = SigmoidLayeredKappa(
+        rho_melt1_surf = float(np.exp(x_log[0]))
+        rho_melt1_deep = float(np.exp(x_log[1]))
+        theta_kappa    = np.exp(x_log[2:])          # shape (4,)
+
+        # Sigmoid derivative — needed for y_trans/width kappa contributions
+        y_trans_val = float(theta_kappa[2])
+        width_val   = float(theta_kappa[3])
+        z_y    = (_y_elem_c - y_trans_val) / width_val
+        sig_y  = 1.0 / (1.0 + np.exp(-np.clip(z_y, -100, 100)))
+        dsig_y = sig_y * (1.0 - sig_y)
+
+        kappa_cur = SigmoidLayeredKappa(
             Ny=Ny, Ly=Ly,
             kappa_surface=float(theta_kappa[0]),
             kappa_deep=float(theta_kappa[1]),
-            y_transition=float(theta_kappa[2]),
-            width=float(theta_kappa[3])
+            y_transition=y_trans_val,
+            width=width_val
         )
         VAP_cur  = {**VAP_base, 'rho_vap0': rho_vap0_fixed}
-        MELT_cur = {**MELT_obs, 'f0': f0_m_fixed, 'rho_melt1': rho_melt1}
+        MELT_cur = {**MELT_obs, 'f0': f0_m_fixed,
+                    'rho_melt1_s': rho_melt1_surf, 'rho_melt1_d': rho_melt1_deep}
 
         J, g_therm_adj, g_kappa_adj, mean_depth, var_depth = validate_depth_adjoint_fd(
             dx, dy, U_obs,
@@ -6749,38 +6832,54 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
             Lx=Lx, N_KL=N_KL, sigma_d=sigma_d, eps_smooth=eps_smooth,
             sigma_field=sigma_field, run_fd_check=False, mean_only=False)
 
+        # Gradients w.r.t. rho_melt1_s/_d come directly from adjoint_grad_all_phase
+        g_rho_surf = g_therm_adj.get('rho_melt1_s', 0.0)
+        g_rho_deep = g_therm_adj.get('rho_melt1_d', 0.0)
+        # rho_melt1 field gradient — needed only for y_trans/width kappa contributions
+        g_field = g_therm_adj.get('rho_melt1_field', np.zeros(Ny))
+        # rho_melt1 contributes to shared y_trans and width gradients
+        drho_dytrans = -(rho_melt1_deep - rho_melt1_surf) * dsig_y / width_val
+        drho_dwidth  = -(rho_melt1_deep - rho_melt1_surf) * dsig_y * z_y / width_val
+        g_kappa_with_rho = g_kappa_adj.copy()
+        g_kappa_with_rho[2] += float(np.sum(g_field * drho_dytrans))
+        g_kappa_with_rho[3] += float(np.sum(g_field * drho_dwidth))
+
         # log-space chain rule: d(J)/d(log theta) = d(J)/d(theta) * theta
         g_log = np.concatenate([
-            [g_therm_adj.get('rho_melt1', 0.0) * rho_melt1],
-            g_kappa_adj * theta_kappa,
+            [g_rho_surf * rho_melt1_surf],
+            [g_rho_deep * rho_melt1_deep],
+            g_kappa_with_rho * theta_kappa,
         ])
         # scale-space chain rule: d(J)/du = d(J)/d(x_log) / PARAM_SCALE2
         g_u = g_log / PARAM_SCALE2
-        prior=None
+        prior = None
         if prior is not None:
-            theta_full = np.array([rho_melt1, *theta_kappa])
+            theta_full = np.array([rho_melt1_surf, rho_melt1_deep, *theta_kappa])
             nll_p, grad_p_theta = prior(theta_full)
             J     += nll_p
             g_log += grad_p_theta * theta_full
-            g_u = g_log / PARAM_SCALE2  # recompute after prior contribution
+            g_u = g_log / PARAM_SCALE2
 
-        print(f"  [var]  J={J:.4e}  rho_melt1={rho_melt1:.4e} (truth {MELT_obs.get('rho_melt1', 0.0):.2e})"
+        print(f"  [var]  J={J:.4e}"
+              f"  rho_surf={rho_melt1_surf:.3e} (truth {_rho_melt1_surf_obs:.2e})"
+              f"  rho_deep={rho_melt1_deep:.3e} (truth {_rho_melt1_deep_obs:.2e})"
               f"  kappa={theta_kappa.round(3)}"
-              f"  g_log={np.array2string(g_log, formatter={'float_kind': lambda x: f'{x:.2e}'})}  g_u={np.array2string(g_u, formatter={'float_kind': lambda x: f'{x:.2e}'})}")
+              f"  g_log={np.array2string(g_log, formatter={'float_kind': lambda x: f'{x:.2e}'})}")
 
         _stage2_log.append({
-            'iter':        len(_stage2_log) + 1,
-            'J':           float(J),
-            'rho_melt1':   rho_melt1,
-            'theta_kappa': theta_kappa.copy(),
-            'g':           g_log.copy(),
-            'depth_traj':  mean_depth.copy(),
-            'var_traj':    var_depth.copy(),
+            'iter':           len(_stage2_log) + 1,
+            'J':              float(J),
+            'rho_melt1_surf': rho_melt1_surf,
+            'rho_melt1_deep': rho_melt1_deep,
+            'theta_kappa':    theta_kappa.copy(),
+            'g':              g_log.copy(),
+            'depth_traj':     mean_depth.copy(),
+            'var_traj':       var_depth.copy(),
         })
 
         with open(_depth2_csv, "a") as _fh2:
             _fh2.write(
-                f"{len(_stage2_log)},{rho_melt1:.6e},"
+                f"{len(_stage2_log)},{rho_melt1_surf:.6e},{rho_melt1_deep:.6e},"
                 + f"{theta_kappa[0]:.6e},{theta_kappa[1]:.6e},"
                 + f"{theta_kappa[2]:.6e},{theta_kappa[3]:.6e},"
                 + ",".join(f"{v:.6e}" for v in mean_depth) + ","
@@ -6788,57 +6887,64 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
             )
 
         np.savez("stage2_log.npz",
-                 iters           = np.array([d['iter']        for d in _stage2_log]),
-                 J               = np.array([d['J']            for d in _stage2_log]),
-                 rho_melt1       = np.array([d['rho_melt1']    for d in _stage2_log]),
-                 theta_kappa     = np.array([d['theta_kappa']  for d in _stage2_log]),
-                 g               = np.array([d['g']            for d in _stage2_log]),
-                 depth_traj      = np.array([d['depth_traj']   for d in _stage2_log]),
-                 var_traj        = np.array([d['var_traj']     for d in _stage2_log]),
-                 h_obs_hist      = h_obs_hist,
-                 sigma2_obs_hist = sigma2_obs_hist,
-                 rho_vap0_fixed  = float(rho_vap0_fixed),
-                 f0_m_fixed      = float(f0_m_fixed),
-                 rho_melt1_truth = float(MELT_obs.get('rho_melt1', 0.0)),
-                 kappa_truth     = theta_kappa_obs.copy())
+                 iters            = np.array([d['iter']           for d in _stage2_log]),
+                 J                = np.array([d['J']               for d in _stage2_log]),
+                 rho_melt1_surf   = np.array([d['rho_melt1_surf']  for d in _stage2_log]),
+                 rho_melt1_deep   = np.array([d['rho_melt1_deep']  for d in _stage2_log]),
+                 theta_kappa      = np.array([d['theta_kappa']     for d in _stage2_log]),
+                 g                = np.array([d['g']               for d in _stage2_log]),
+                 depth_traj       = np.array([d['depth_traj']      for d in _stage2_log]),
+                 var_traj         = np.array([d['var_traj']        for d in _stage2_log]),
+                 h_obs_hist       = h_obs_hist,
+                 sigma2_obs_hist  = sigma2_obs_hist,
+                 rho_vap0_fixed   = float(rho_vap0_fixed),
+                 f0_m_fixed       = float(f0_m_fixed),
+                 rho_melt1_surf_truth = float(_rho_melt1_surf_obs),
+                 rho_melt1_deep_truth = float(_rho_melt1_deep_obs),
+                 kappa_truth      = theta_kappa_obs.copy())
 
         with open("stage2_log.csv", "w") as _f2:
-            _f2.write(f"# rho_melt1_truth={float(MELT_obs.get('rho_melt1', 0.0)):.6e}\n")
+            _f2.write(f"# rho_melt1_surf_truth={_rho_melt1_surf_obs:.6e}  rho_melt1_deep_truth={_rho_melt1_deep_obs:.6e}\n")
             _f2.write(f"# rho_vap0_fixed={float(rho_vap0_fixed):.6e}  f0_m_fixed={float(f0_m_fixed):.6f}\n")
-            _f2.write("iter,J,rho_melt1,kappa_surf,kappa_deep,y_trans,width,"
-                      "g_rho_melt1,g_ks,g_kd,g_yt,g_w\n")
+            _f2.write("iter,J,rho_melt1_surf,rho_melt1_deep,kappa_surf,kappa_deep,y_trans,width,"
+                      "g_rms,g_rmd,g_ks,g_kd,g_yt,g_w\n")
             for d in _stage2_log:
                 tk = d['theta_kappa']
                 gv = d['g']
                 _f2.write(
-                    f"{d['iter']},{d['J']:.6e},{d['rho_melt1']:.6e},"
+                    f"{d['iter']},{d['J']:.6e},{d['rho_melt1_surf']:.6e},{d['rho_melt1_deep']:.6e},"
                     f"{tk[0]:.6e},{tk[1]:.6e},{tk[2]:.6e},{tk[3]:.6e},"
-                    f"{gv[0]:.4e},{gv[1]:.4e},{gv[2]:.4e},{gv[3]:.4e},{gv[4]:.4e}\n"
+                    f"{gv[0]:.4e},{gv[1]:.4e},{gv[2]:.4e},{gv[3]:.4e},{gv[4]:.4e},{gv[5]:.4e}\n"
                 )
-  
+
         g_max = 0.3   # maximum gradient component magnitude
         g_u = g_log / PARAM_SCALE2
         g_u = g_u * np.minimum(1.0, g_max / np.maximum(np.abs(g_u), 1e-12))
         return J * OBJ_SCALE2, g_u * OBJ_SCALE2
 
-    print("\n=== Stage 2: rho_melt1 + kappa (f1_m fixed at obs) ===")
+    print("\n=== Stage 2: layered rho_melt1 + kappa (f1_m fixed at obs) ===")
+    _rho_melt1_surf_init = float(MELT.get('rho_melt1_s', MELT.get('rho_melt1', 1.5e8)))
+    _rho_melt1_deep_init = float(MELT.get('rho_melt1_d', MELT.get('rho_melt1', 1.5e8)))
     x_log0_stage2 = np.log([
-        MELT.get('rho_melt1', 1.0),  # rho_melt1 starting point
-        *theta_kappa_init,            # kappa starting point [surf, deep, y_trans, width]
+        _rho_melt1_surf_init,   # rho_melt1_surf starting point
+        _rho_melt1_deep_init,   # rho_melt1_deep starting point
+        *theta_kappa_init,      # kappa [surf, deep, y_trans, width]
     ])
     x0_stage2 = x_log0_stage2 * PARAM_SCALE2  # transform to scaled coordinates
-      
-    lb = [np.log(5e7)   * PARAM_SCALE2[0],
-            np.log(80.0)  * PARAM_SCALE2[1],
-            np.log(15.0)  * PARAM_SCALE2[2],
-            np.log(0.85*Ly)* PARAM_SCALE2[3],
-            np.log(0.1*Ly)* PARAM_SCALE2[4]]
-    
-    ub = [np.log(1e9)    * PARAM_SCALE2[0],
-            np.log(80.0)  * PARAM_SCALE2[1],
-            np.log(450.0)  * PARAM_SCALE2[2],
-            np.log(0.95*Ly)* PARAM_SCALE2[3],
-            np.log(0.1*Ly) * PARAM_SCALE2[4]]
+
+    lb = [np.log(2e7)    * PARAM_SCALE2[0],   # rho_melt1_surf
+          np.log(2e7)    * PARAM_SCALE2[1],   # rho_melt1_deep
+          np.log(80.0)   * PARAM_SCALE2[2],   # kappa_surf
+          np.log(80.0)   * PARAM_SCALE2[3],   # kappa_deep
+          np.log(0.9*Ly) * PARAM_SCALE2[4],   # y_trans
+          np.log(0.01*Ly)* PARAM_SCALE2[5]]   # width
+
+    ub = [np.log(5e8)    * PARAM_SCALE2[0],   # rho_melt1_surf
+          np.log(5e8)    * PARAM_SCALE2[1],   # rho_melt1_deep
+          np.log(80.0)  * PARAM_SCALE2[2],   # kappa_surf
+          np.log(80.0)  * PARAM_SCALE2[3],   # kappa_deep
+          np.log(0.9*Ly)* PARAM_SCALE2[4],   # y_trans
+          np.log(0.01*Ly) * PARAM_SCALE2[5]]   # width
     lbfgs_bounds = list(zip(lb, ub))
     res2 = minimize(
         obj_var, x0_stage2, jac=True, method='L-BFGS-B',
@@ -6847,13 +6953,16 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
                  'gtol': 1e-8, 'maxcor': 10}
     )
     x_log_final = res2.x / PARAM_SCALE2  # recover log-space params
-    print(f"  Stage 2 done: rho_melt1={np.exp(x_log_final[0]):.4e} (truth {MELT_obs.get('rho_melt1', 0.0):.2e})"
-          f"  kappa={np.exp(x_log_final[1:]).round(2)}  J={res2.fun/OBJ_SCALE2:.4e}  {res2.message}")
+    print(f"  Stage 2 done:"
+          f"  rho_surf={np.exp(x_log_final[0]):.4e} (truth {_rho_melt1_surf_obs:.2e})"
+          f"  rho_deep={np.exp(x_log_final[1]):.4e} (truth {_rho_melt1_deep_obs:.2e})"
+          f"  kappa={np.exp(x_log_final[2:]).round(2)}"
+          f"  J={res2.fun/OBJ_SCALE2:.4e}  {res2.message}")
+
+
 
 
 run_inf_lbfgs(skip_stage1=True, var_round_iters=500, prior=prior_full)
-
-
 validate_depth_adjoint_fd(dx,dy,U_obs,
     run_forward,
     U0,
@@ -6865,14 +6974,13 @@ validate_depth_adjoint_fd(dx,dy,U_obs,
     forcing_param_grads_numpy,
     _clear_all_kappa_caches,#
     bc_idx, params,
-    M_bc, K_bc, solve_A,    
+    M_bc, K_bc, solve_A,
     K_SG_K0, K_SG_K1, M_SG_M0, M_SG_M1,
     sigma2_obs_hist,
     spatial_op_obs, h_obs_hist, kappa_param=kappa_param_init,
     compute_adjoint_grad_kappa_fn=compute_adjoint_grad_kappa_phase_matrixfree_all,
     Lx=Lx,
     N_KL=N_KL, sigma_d = sigma_d, eps_smooth=eps_smooth,sigma_field= sigma_field, mean_only=False)
-
 def run_J_walk():
     """
     Evaluate J at 4 hardcoded steps from x0 → truth in log-space.

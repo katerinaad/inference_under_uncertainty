@@ -281,7 +281,8 @@ def run_adjoint_depth(U_obs,
                       evap_range=0.0,
                       h_obs_hist=None,
                       sigma_d=None,
-                      mean_only=False
+                      mean_only=False,
+                      theta_kappa=None,
                       ):
     """
     Backward adjoint sweep for the NLL depth objective.
@@ -289,6 +290,12 @@ def run_adjoint_depth(U_obs,
     h_obs_hist : (time_steps,) observed depths (required for non-trivial gradient)
     sigma_d : depth observation noise std dev (m)
     """
+    if (theta_kappa is not None
+            and 'rho_melt1_s' in melt_prop and 'rho_melt1_d' in melt_prop):
+        from inf_layered_vap_exp import _sigmoid_rho_field
+        tk = np.asarray(theta_kappa, float)
+        melt_prop = {**melt_prop,
+                     'rho_melt1': _sigmoid_rho_field(melt_prop, float(tk[2]), float(tk[3]))}
     if beta is None:
         beta = 2.0 * Ly / Nx
     if h_obs_hist is None:
@@ -440,7 +447,8 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
                                           Nx, Ny, Ly, num_nodes, P, T_abl,
                                           adjoint_one_step_fn, sigma2_obs_hist,
                                           eps=eps_smooth, beta=beta, evap_range=evap_range,
-                                          h_obs_hist=h_obs_hist, sigma_d=sigma_d, mean_only=mean_only
+                                          h_obs_hist=h_obs_hist, sigma_d=sigma_d, mean_only=mean_only,
+                                          theta_kappa=theta_kappa,
                                           )
     print("after adjoint")
     # 3. Adjoint gradients
@@ -448,7 +456,8 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
         U_hist0, Mu_hist, solid_prop, melt_prop,
         K_SG_K1=K0_K1, M_SG_M1=M0_M1,
         forcing_param_grads_numpy=forcing_param_grads_numpy_fn,
-        spatial_op=sp0, freeze_phase=False, vap_prop=vap_prop
+        spatial_op=sp0, freeze_phase=False, vap_prop=vap_prop,
+        theta_kappa=theta_kappa,
     )
     print("grad all phase")
     # 3b. Kappa adjoint gradient
@@ -515,8 +524,9 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
     if run_fd_check==True:
         results = {}
         param_pairs = [
-            ('rho_melt1', 'rho_melt1', 'melt'),
-            ('rho_vap1', 'rho_vap1', 'vap'),
+            ('rho_melt1_d', 'rho_melt1_d', 'melt'),
+            ('rho_melt1_s', 'rho_melt1_s', 'melt'),
+
         ]
         for param_name, key, which in param_pairs:
             g_adj = float(g_phase[param_name])
@@ -544,6 +554,12 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
                 print(f"{param_name:<12} {g_adj:>+18.6e} {g_fd:>+18.6e} "
                     f"{rel_err:>12.3e} {status}")
             results[param_name] = {'adj': g_adj, 'fd': g_fd, 'rel_err': rel_err}
+
+        # 5b. Sigmoid rho_melt1 surface / deep FD check
+        # -----------------------------------------------------------------
+        # rho_melt1_field(y) = rho_s + (rho_d - rho_s) * sig(y)
+        # d J / d rho_s = sum(g_field * (1 - sig))
+        # d J / d rho_d = sum(g_field *       sig )
 
         # 5. Kappa FD check
         # -----------------------------------------------------------------

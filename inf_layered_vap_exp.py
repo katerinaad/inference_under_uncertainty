@@ -57,11 +57,11 @@ rhoL = 0
 #rho_vap0 = 1e9    # latent heat of vaporisation (J/m^3); set >0 to activate vapour transition
 #rho_vap1 = 1e7
 T_final = 14.0
-dt = 0.3
-N_KL = 40 # number of KL terms
+dt = 0.075
+N_KL = 45 # number of KL terms
 P = N_KL + 1     # total chaos modes (0th = mean, 1...N_KL = KL terms)
 dx, dy = Lx/Nx, Ly/Ny
-num_obs =100
+num_obs =10
 alpha_k = alpha_m=0
 t_off = 50000
 sigma_d = 1e-10
@@ -6810,7 +6810,10 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
         )
         VAP_cur  = {**VAP_base, 'rho_vap0': rho_vap0_fixed}
         MELT_cur = {**MELT_obs, 'f0': f0_m_fixed,
-                    'rho_melt1_s': rho_melt1_surf, 'rho_melt1_d': rho_melt1_deep}
+                    'rho_melt1_s': rho_melt1_surf, 'rho_melt1_d': rho_melt1_deep,
+                    'rho_melt1': _sigmoid_rho_field(
+                        {'rho_melt1_s': rho_melt1_surf, 'rho_melt1_d': rho_melt1_deep},
+                        y_trans_val, width_val)}
 
         J, g_therm_adj, g_kappa_adj, mean_depth, var_depth = validate_depth_adjoint_fd(
             dx, dy, U_obs,

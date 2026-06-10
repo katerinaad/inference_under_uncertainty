@@ -291,7 +291,8 @@ def run_adjoint_depth(U_obs,
     sigma_d : depth observation noise std dev (m)
     """
     if (theta_kappa is not None
-            and 'rho_melt1_s' in melt_prop and 'rho_melt1_d' in melt_prop):
+            and 'rho_melt1_s' in melt_prop and 'rho_melt1_d' in melt_prop
+            and 'rho_melt1' not in melt_prop):
         from inf_layered_vap_exp import _sigmoid_rho_field
         tk = np.asarray(theta_kappa, float)
         melt_prop = {**melt_prop,

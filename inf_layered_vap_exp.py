@@ -46,7 +46,7 @@ def rss_mb():
 # Domain & FE Mesh Parameters (2D physical space)
 # ------------------------------
 Lx, Ly = 0.21, 0.21
-Nx, Ny = 50,50
+Nx, Ny = 40,40
 k0= 1.0       # baseline conductivity
 k1 = 0.2 # scaling for fluctuations
 m0 = 1e6
@@ -56,9 +56,9 @@ f1 = 0.0
 rhoL = 0
 #rho_vap0 = 1e9    # latent heat of vaporisation (J/m^3); set >0 to activate vapour transition
 #rho_vap1 = 1e7
-T_final = 14.0
+T_final = 5.0
 dt = 0.075
-N_KL = 45 # number of KL terms
+N_KL = 40 # number of KL terms
 P = N_KL + 1     # total chaos modes (0th = mean, 1...N_KL = KL terms)
 dx, dy = Lx/Nx, Ly/Ny
 num_obs =10
@@ -75,21 +75,21 @@ sigma_d = 1e-10
 kappa_param_obs = SigmoidLayeredKappa(
     Ny=Ny,
     Ly=Ly,
-    kappa_surface=280.0,    # short correlation near surface (weathered/fractured)
-    kappa_deep=80.0,       # longer correlation at depth (competent granite)
+    kappa_surface=200.0,    # short correlation near surface (weathered/fractured)
+    kappa_deep=100.0,       # longer correlation at depth (competent granite)
     y_transition=0.9*Ly,   # transition at 60% depth
     width=0.01*Ly,          # transition zone ~10% of domain width
     )
 kappa_param_init = SigmoidLayeredKappa(
     Ny=Ny,
     Ly=Ly,
-    kappa_surface=80.0,    # short correlation near surface (weathered/fractured)
-    kappa_deep=80.0,       # longer correlation at depth (competent granite)
-    y_transition=0.9*Ly,   # transition at 60% depth
+    kappa_surface=180.0,    # short correlation near surface (weathered/fractured)
+    kappa_deep=150.0,       # longer correlation at depth (competent granite)
+    y_transition=0.8*Ly,   # transition at 60% depth
     width=0.01*Ly,          # transition zone ~10% of domain width
     )
-theta_kappa_init = np.array([80.0,80.0, 0.9*Ly,0.01*Ly])
-theta_kappa_obs = np.array([80.0,80.0, 0.9*Ly,0.01*Ly])
+theta_kappa_init = np.array([180.0,150.0, 0.8*Ly,0.01*Ly])
+theta_kappa_obs = np.array([200.0,100.0, 0.9*Ly,0.01*Ly])
 np.random.seed(0)
 #Generate GMRF  and assemble SG matrices
 # Generate the GMRF
@@ -108,10 +108,10 @@ T_melt_hi =1573.0
 Delta_melt = 150.0   # smoothing width
 
 # ---- solid / melt parameter sets ----
-SOLID =dict(k0=2.0,  k1=0.0, m0=2650 * 1050, m1= 2650*100*0, f0=1.0, f1=0.0)
-MELT  =  dict(k0=2.0,  k1=0.0, m0=2650 * 1050, m1= 2650*1000*0, f0=0.8, f1=0.0,
+SOLID =dict(k0=2.0,  k1=0.0, m0=2650 * 1050, m1= 2650*100, f0=1.0, f1=0.0)
+MELT  =  dict(k0=2.0,  k1=0.0, m0=2650 * 1050, m1= 2650*100, f0=0.8, f1=0.0,
              rho_melt0=1.5e9, rho_melt1=1.5e8,
-             rho_melt1_s=0.5e8, rho_melt1_d=3.0e8)
+             rho_melt1_s=3.0e8, rho_melt1_d=3.0e8)
 #SOLID_obs = dict(k0=2.0,  k1=0.0, m0=2.3e6, m1=2e5, f0=1.0, f1=0.0)
 #MELT_obs  = dict(k0=2.0,  k1=0.0, m0=2.0e6, m1=2e5, f0=1.0, f1=0.0)
 # ---- vapour parameter set (properties above the vaporisation front) ----
@@ -121,7 +121,7 @@ SOLID_obs = dict(
     k0  = 2.0,              # W/(m·K) — Gokhale Table 1
     k1  = 0.0,
     m0  = 2650 * 1050,      # 2.7825e6 J/(m³·K) — rho*Cp solid
-    m1  = 2650*100*0,
+    m1  = 2650*100,
     f0  = 1.0,             # 0.75 * 0.83 — transmissivity * absorptivity correction
     f1  = 0.0,
 )
@@ -130,11 +130,11 @@ MELT_obs = dict(
     k0  = 2.0,              # W/(m·K) — same as solid in Gokhale Table 1
     k1  = 0.0,
     m0  = 2650 * 1050,      # 4.1605e6 J/(m³·K) — rho*Cp melt
-    m1  = 2650 * 100*0,
+    m1  = 2650 * 100,
     f0  = 0.8,             # same absorptivity correction as solid
     f1  = 0.0, rho_melt0=1.5e9, rho_melt1=0.0,  # rho_melt1 overwritten below
-    rho_melt1_s = 3.0e8,   # surface value for sigmoid field
-    rho_melt1_d = 0.5e8,   # deep value for sigmoid field
+    rho_melt1_s = 2.5e8,   # surface value for sigmoid field
+    rho_melt1_d = 2.5e8,   # deep value for sigmoid field
 )
 
 # ── layered rho_melt1 parametrisation ─────────────────────────────────────────
@@ -167,7 +167,7 @@ VAP_obs = dict(
     k0      = 0.26,            # W/(m·K) — vapour thermal conductivity
     k1      = 0.01,
     m0      =  2650  * 1570,      # 1010.6 J/(m³·K) — rho_v * Cp_v
-    m1      =  2650  * 15,
+    m1      =  2650  * 15*0,
     f0      = 0.2,
     f1      = 0.0,
    # rho_vap0 = 2650 * 1, # 3.621e10 J/m³ — rho_melt * L_v (Gokhale Table 1)414.65414574953286
@@ -180,7 +180,7 @@ theta_lab = [1e8, 80, 35, 0.168, 0.021]   # kappa_surf 80 not 60, kappa_deep 35 
 # ---- vaporisation phase controls ----
 T_vap_lo    = 3054.0          # onset  of vaporisation window
 T_vap_hi    = 3254.0          # end    of vaporisation window
-Delta_vap   = 100.0            # smoothing half-width (same role as Delta_melt)
+Delta_vap   = 200.0            # smoothing half-width (same role as Delta_melt)
 T_abl = 3255.0
 
 # Mesh
@@ -3455,12 +3455,12 @@ def build_SG_operators(sigma, ell, frozen, theta_kappa=None, kappa_param=None):
     k_fluct_grid = k_fluct.reshape(Nx + 1, Ny + 1)     # vertex-centred: n == (Nx+1)*(Ny+1)
     k_values = k0 + k1 * k_fluct_grid
 
-    plt.figure()
-    plt.imshow(k_values.T, origin="lower", aspect="auto")
-    plt.colorbar()
-    plt.xlabel("x index")
-    plt.ylabel("y index")
-    plt.show()
+    #plt.figure()
+    #plt.colorbar()
+    #plt.ylabel("y index")
+    #plt.imshow(k_values.T, origin="lower", aspect="auto")
+    #plt.xlabel("x index")
+    #plt.show()
     # sanity
     if phi_flat.ndim != 2:
         raise ValueError(f"Expected eigvecs 2D (n, N_KL), got {phi_flat.shape}")
@@ -4903,7 +4903,7 @@ def phi_one_step(t,
         plt.imshow(u_variance.T, extent=[0, Lx, 0, Ly], origin='lower', cmap='magma')
         plt.colorbar(label='Temperature Variance'); plt.title("Temperature Variance at Final Time")
         plt.xlabel("x"); plt.ylabel("y"); plt.show()
-    if t% 50==0:
+    if t% 500==0:
     #
         plot()
     u_mean = U_new[:num_nodes]
@@ -5490,6 +5490,22 @@ for t in range(1, time_steps):
 print("h_obs_hist (analytical):      ", h_obs_hist)
 print("sigma2_obs_hist (analytical): ", sigma2_obs_hist)
 print("CHECK")
+
+# Save depth PC coefficients for MC sampling studies
+_depth_pc = np.zeros((time_steps, P))
+for t in range(1, time_steps):
+    u_t = U_obs[t]
+    u_mean_2d = u_t[:num_nodes].reshape(Nx+1, Ny+1)
+    _, _, w_softmin, _, dH = softmin_depth(u_mean_2d, y_nodes, T_abl, eps_smooth, beta)
+    g_flat = (w_softmin[:, None] * wz[None, :] * dH).ravel()
+    _depth_pc[t] = U_obs[t].reshape(P, num_nodes) @ g_flat
+np.savez("depth_pc_coeffs.npz",
+         depth_pc=_depth_pc,
+         multi_idx=np.array(multi_idx),
+         h_obs_hist=h_obs_hist,
+         sigma2_obs_hist=sigma2_obs_hist,
+         N_KL=N_KL, P=P, time_steps=time_steps)
+print("Saved depth_pc_coeffs.npz")
 
 #T_obs_hist = make_T_obs_history_weighted(U_obs, x_vis_hist, y_vis_hist, w_vis_hist,
 #                                 x, y, sigma_obs, num_obs,
@@ -6527,7 +6543,7 @@ def run_inf():
 
 
 def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
-                  skip_stage1=False):
+                  skip_stage1=False, log_tag=""):
     from scipy.optimize import minimize
 
     OBJ_SCALE  = 1e-8   # Stage 1: gradients O(1e7) → scaled to O(1e-1)
@@ -6651,7 +6667,7 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
             kappa_param=None,
             compute_adjoint_grad_kappa_fn=None,
             Lx=Lx, N_KL=N_KL, sigma_d=sigma_d, eps_smooth=eps_smooth,
-            sigma_field=sigma_field, run_fd_check=False, mean_only=True)
+            sigma_field=sigma_field, run_fd_check=False, mean_only=False)
 
         g_log = np.array([
             g_therm_adj.get('rho_vap0', 0.0) * rho0,
@@ -6769,7 +6785,8 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
     # ── Stage 2: mean+variance, rho_vap1 + kappa free (f1_m fixed) ─────────────
     _stage2_log = []
 
-    _depth2_csv = "stage2_depth_log.csv"
+    _tag        = f"_{log_tag}" if log_tag else ""
+    _depth2_csv = f"stage2_depth_log{_tag}.csv"
     _depth2_header = (
         "# h_obs,"    + ",".join(f"{v:.6e}" for v in h_obs_hist) + "\n"
         "# sigma2_obs," + ",".join(f"{v:.6e}" for v in sigma2_obs_hist) + "\n"
@@ -6889,7 +6906,7 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
                 + ",".join(f"{v:.6e}" for v in var_depth) + "\n"
             )
 
-        np.savez("stage2_log.npz",
+        np.savez(f"stage2_log{_tag}.npz",
                  iters            = np.array([d['iter']           for d in _stage2_log]),
                  J                = np.array([d['J']               for d in _stage2_log]),
                  rho_melt1_surf   = np.array([d['rho_melt1_surf']  for d in _stage2_log]),
@@ -6906,7 +6923,7 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
                  rho_melt1_deep_truth = float(_rho_melt1_deep_obs),
                  kappa_truth      = theta_kappa_obs.copy())
 
-        with open("stage2_log.csv", "w") as _f2:
+        with open(f"stage2_log{_tag}.csv", "w") as _f2:
             _f2.write(f"# rho_melt1_surf_truth={_rho_melt1_surf_obs:.6e}  rho_melt1_deep_truth={_rho_melt1_deep_obs:.6e}\n")
             _f2.write(f"# rho_vap0_fixed={float(rho_vap0_fixed):.6e}  f0_m_fixed={float(f0_m_fixed):.6f}\n")
             _f2.write("iter,J,rho_melt1_surf,rho_melt1_deep,kappa_surf,kappa_deep,y_trans,width,"
@@ -6920,7 +6937,7 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
                     f"{gv[0]:.4e},{gv[1]:.4e},{gv[2]:.4e},{gv[3]:.4e},{gv[4]:.4e},{gv[5]:.4e}\n"
                 )
 
-        g_max = 0.3   # maximum gradient component magnitude
+        g_max = 0.1   # maximum gradient component magnitude
         g_u = g_log / PARAM_SCALE2
         g_u = g_u * np.minimum(1.0, g_max / np.maximum(np.abs(g_u), 1e-12))
         return J * OBJ_SCALE2, g_u * OBJ_SCALE2
@@ -6933,20 +6950,27 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
         _rho_melt1_deep_init,   # rho_melt1_deep starting point
         *theta_kappa_init,      # kappa [surf, deep, y_trans, width]
     ])
+
+    # Compute PARAM_SCALE2 from actual first gradient (avoids stale hardcoded values
+    # causing 40× overshoots when y_trans is free).
+    PARAM_SCALE2 = np.ones(6)          # identity: obj_var returns g_log directly
+    _, g_log_init = obj_var(x_log0_stage2)
+    PARAM_SCALE2 = np.sqrt(np.maximum(np.abs(g_log_init), 1e-12) / 0.05)  # 5% first step
+
     x0_stage2 = x_log0_stage2 * PARAM_SCALE2  # transform to scaled coordinates
 
-    lb = [np.log(2e7)    * PARAM_SCALE2[0],   # rho_melt1_surf
-          np.log(2e7)    * PARAM_SCALE2[1],   # rho_melt1_deep
-          np.log(80.0)   * PARAM_SCALE2[2],   # kappa_surf
-          np.log(80.0)   * PARAM_SCALE2[3],   # kappa_deep
-          np.log(0.9*Ly) * PARAM_SCALE2[4],   # y_trans
+    lb = [np.log(3e8)    * PARAM_SCALE2[0],   # rho_melt1_surf
+          np.log(3e8)    * PARAM_SCALE2[1],   # rho_melt1_deep
+          np.log(170.0)   * PARAM_SCALE2[2],   # kappa_surf
+          np.log(90.0)   * PARAM_SCALE2[3],   # kappa_deep
+          np.log(0.7*Ly) * PARAM_SCALE2[4],   # y_trans
           np.log(0.01*Ly)* PARAM_SCALE2[5]]   # width
 
-    ub = [np.log(5e8)    * PARAM_SCALE2[0],   # rho_melt1_surf
-          np.log(5e8)    * PARAM_SCALE2[1],   # rho_melt1_deep
-          np.log(80.0)  * PARAM_SCALE2[2],   # kappa_surf
-          np.log(80.0)  * PARAM_SCALE2[3],   # kappa_deep
-          np.log(0.9*Ly)* PARAM_SCALE2[4],   # y_trans
+    ub = [np.log(3e8)    * PARAM_SCALE2[0],   # rho_melt1_surf
+          np.log(3e8)    * PARAM_SCALE2[1],   # rho_melt1_deep
+          np.log(230.0)  * PARAM_SCALE2[2],   # kappa_surf
+          np.log(160.0)  * PARAM_SCALE2[3],   # kappa_deep
+          np.log(0.95*Ly)* PARAM_SCALE2[4],   # y_trans
           np.log(0.01*Ly) * PARAM_SCALE2[5]]   # width
     lbfgs_bounds = list(zip(lb, ub))
     res2 = minimize(
@@ -6962,10 +6986,6 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
           f"  kappa={np.exp(x_log_final[2:]).round(2)}"
           f"  J={res2.fun/OBJ_SCALE2:.4e}  {res2.message}")
 
-
-
-
-run_inf_lbfgs(skip_stage1=True, var_round_iters=500, prior=prior_full)
 validate_depth_adjoint_fd(dx,dy,U_obs,
     run_forward,
     U0,
@@ -6983,7 +7003,50 @@ validate_depth_adjoint_fd(dx,dy,U_obs,
     spatial_op_obs, h_obs_hist, kappa_param=kappa_param_init,
     compute_adjoint_grad_kappa_fn=compute_adjoint_grad_kappa_phase_matrixfree_all,
     Lx=Lx,
-    N_KL=N_KL, sigma_d = sigma_d, eps_smooth=eps_smooth,sigma_field= sigma_field, mean_only=False)
+    N_KL=N_KL, sigma_d = sigma_d, eps_smooth=eps_smooth,sigma_field= sigma_field, mean_only=True)
+run_inf_lbfgs(skip_stage1=True,
+            prior=prior_full)
+mc_on = False
+if mc_on == True: 
+
+    # ── CLI args for MC ablation study ───────────────────────────────────────────
+    import argparse as _ap
+    _parser = _ap.ArgumentParser(add_help=False)
+    _parser.add_argument("--mc_obs",   type=int,   default=None)
+    _parser.add_argument("--seed",     type=int,   default=0)
+    _parser.add_argument("--var_iters",type=int,   default=500)
+    _parser.add_argument("--tag",      type=str,   default="")
+    _cli, _ = _parser.parse_known_args()
+
+    if _cli.mc_obs is not None:
+        import math as _math
+        from numpy.polynomial.hermite_e import hermeval as _hermeval
+
+        def _eval_psi(xi, alpha):
+            val = 1.0
+            for m, p in enumerate(alpha):
+                c = np.zeros(p + 1); c[-1] = 1.0
+                val *= _hermeval(xi[m], c) / np.sqrt(_math.factorial(p))
+            return val
+
+        _pc = np.load("depth_pc_coeffs.npz")
+        _depth_pc  = _pc["depth_pc"]   # (time_steps, P)
+        _midx      = _pc["multi_idx"]  # (P, N_KL)
+        _rng       = np.random.default_rng(_cli.seed)
+        _samples   = np.zeros((time_steps, _cli.mc_obs))
+        for _i in range(_cli.mc_obs):
+            _xi  = _rng.standard_normal(N_KL)
+            _psi = np.array([_eval_psi(_xi, tuple(_midx[k])) for k in range(P)])
+            _samples[:, _i] = _depth_pc @ _psi
+        sigma2_obs_hist = _samples.var(axis=1, ddof=1)
+        print(f"[MC ablation] n_obs={_cli.mc_obs}  seed={_cli.seed}  "
+            f"sigma2 range [{sigma2_obs_hist.min():.3e}, {sigma2_obs_hist.max():.3e}]")
+
+    _log_tag = _cli.tag if _cli.tag else ""
+    run_inf_lbfgs(skip_stage1=True, var_round_iters=_cli.var_iters,
+                prior=prior_full, log_tag=_log_tag)
+    import sys as _sys; _sys.exit(0)
+
 def run_J_walk():
     """
     Evaluate J at 4 hardcoded steps from x0 → truth in log-space.

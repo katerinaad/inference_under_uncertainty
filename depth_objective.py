@@ -42,7 +42,7 @@ def softmin_depth(u_mean_2d, y_nodes, T_abl, eps, beta, evap_range=0.0):
     ytop = float(y_nodes[-1])
     #beta=0.005
     evap_range = 0
-    beta = 0.0005
+    beta = 0.005
     phi = u_mean_2d - T_abl - evap_range
     phi_eps = phi / eps
     H = 0.5 * (1.0 + (2.0 / np.pi) * np.arctan(phi_eps))
@@ -375,7 +375,7 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
                                sigma2_obs_hist,
                                spatial_op,
                                h_obs_hist,  # required: observed depth history
-                               eps_smooth=10.0,
+                               eps_smooth=30.0,
                                beta=None,
                                evap_range=0.0,
                                sigma_d=None,
@@ -525,6 +525,8 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
     if run_fd_check==True:
         results = {}
         param_pairs = [
+            ('rho_vap0', 'rho_vap0', 'vap'),
+            ('f0_m', 'f0', 'melt'),
             ('rho_melt1_d', 'rho_melt1_d', 'melt'),
             ('rho_melt1_s', 'rho_melt1_s', 'melt'),
 

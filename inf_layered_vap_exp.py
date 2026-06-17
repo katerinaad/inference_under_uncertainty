@@ -78,23 +78,23 @@ kappa_param_obs = SigmoidLayeredKappa(
     kappa_surface=200.0,    # short correlation near surface (weathered/fractured)
     kappa_deep=100.0,       # longer correlation at depth (competent granite)
     y_transition=0.9*Ly,   # transition at 60% depth
-    width=0.01*Ly,          # transition zone ~10% of domain width
+    width=0.1*Ly,          # transition zone ~10% of domain width
     )
 kappa_param_init = SigmoidLayeredKappa(
     Ny=Ny,
     Ly=Ly,
     kappa_surface=180.0,    # short correlation near surface (weathered/fractured)
     kappa_deep=150.0,       # longer correlation at depth (competent granite)
-    y_transition=0.8*Ly,   # transition at 60% depth
-    width=0.01*Ly,          # transition zone ~10% of domain width
+    y_transition=0.95*Ly,   # transition at 60% depth
+    width=0.1*Ly,          # transition zone ~10% of domain width
     )
-theta_kappa_init = np.array([180.0,150.0, 0.8*Ly,0.01*Ly])
-theta_kappa_obs = np.array([200.0,100.0, 0.9*Ly,0.01*Ly])
+theta_kappa_init = np.array([180.0,150.0, 0.95*Ly,0.1*Ly])
+theta_kappa_obs = np.array([200.0,100.0, 0.9*Ly,0.1*Ly])
 np.random.seed(0)
 #Generate GMRF  and assemble SG matrices
 # Generate the GMRF
 sigma = 1.0  # standard deviation (legacy, not used in SPDE path)
-sigma_field = 10.0  # marginal std of KL field; scales eigenvalues as sigma_field^2
+sigma_field = 1.0  # marginal std of KL field; scales eigenvalues as sigma_field^2
 ell = 0.5 # correlation length
 xi_sample = np.random.normal(0, 1, N_KL)
 steps = int(T_final/dt)
@@ -108,8 +108,8 @@ T_melt_hi =1573.0
 Delta_melt = 150.0   # smoothing width
 
 # ---- solid / melt parameter sets ----
-SOLID =dict(k0=2.0,  k1=0.0, m0=2650 * 1050, m1= 2650*100, f0=1.0, f1=0.0)
-MELT  =  dict(k0=2.0,  k1=0.0, m0=2650 * 1050, m1= 2650*100, f0=0.8, f1=0.0,
+SOLID =dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*100, f0=1.0, f1=0.0)
+MELT  =  dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*100, f0=0.8, f1=0.0,
              rho_melt0=1.5e9, rho_melt1=1.5e8,
              rho_melt1_s=3.0e8, rho_melt1_d=3.0e8)
 #SOLID_obs = dict(k0=2.0,  k1=0.0, m0=2.3e6, m1=2e5, f0=1.0, f1=0.0)
@@ -131,7 +131,7 @@ MELT_obs = dict(
     k1  = 0.0,
     m0  = 2650 * 1050,      # 4.1605e6 J/(m³·K) — rho*Cp melt
     m1  = 2650 * 100,
-    f0  = 0.8,             # same absorptivity correction as solid
+    f0  = 0.6,             # same absorptivity correction as solid
     f1  = 0.0, rho_melt0=1.5e9, rho_melt1=0.0,  # rho_melt1 overwritten below
     rho_melt1_s = 2.5e8,   # surface value for sigmoid field
     rho_melt1_d = 2.5e8,   # deep value for sigmoid field
@@ -159,7 +159,7 @@ MELT_obs["rho_melt1"] = _sigmoid_rho_field(
 )
 
 # ---- vapour parameter set ----
-VAP = dict(k0=0.26, k1=0.01, m0=2650  * 1570, m1=2650  * 15*0, f0=0.2, f1=0.0,
+VAP = dict(k0=0.26, k1=0.01, m0=2650  * 1570, m1=2650  * 157, f0=0.2, f1=0.0,
     rho_vap0 =  1366400000,
     rho_vap1 = 1366400000*0 ,)
 
@@ -167,11 +167,11 @@ VAP_obs = dict(
     k0      = 0.26,            # W/(m·K) — vapour thermal conductivity
     k1      = 0.01,
     m0      =  2650  * 1570,      # 1010.6 J/(m³·K) — rho_v * Cp_v
-    m1      =  2650  * 15*0,
+    m1      =  2650  * 157,
     f0      = 0.2,
     f1      = 0.0,
    # rho_vap0 = 2650 * 1, # 3.621e10 J/m³ — rho_melt * L_v (Gokhale Table 1)414.65414574953286
-    rho_vap0 =  1366400000,
+    rho_vap0 =  1666400000,
     rho_vap1 = 136640000*0) 
 
 theta_lab = [1e8, 80, 35, 0.168, 0.021]   # kappa_surf 80 not 60, kappa_deep 35 not 40
@@ -180,7 +180,7 @@ theta_lab = [1e8, 80, 35, 0.168, 0.021]   # kappa_surf 80 not 60, kappa_deep 35 
 # ---- vaporisation phase controls ----
 T_vap_lo    = 3054.0          # onset  of vaporisation window
 T_vap_hi    = 3254.0          # end    of vaporisation window
-Delta_vap   = 200.0            # smoothing half-width (same role as Delta_melt)
+Delta_vap   = 100.0            # smoothing half-width (same role as Delta_melt)
 T_abl = 3255.0
 
 # Mesh
@@ -5464,7 +5464,7 @@ for k in range(1, min(P, 4)):
 y_nodes = np.linspace(0.0, Ly, Ny + 1)
 wz = _trap_weights(y_nodes)
 #J_opt=0
-eps_smooth = 30.0
+eps_smooth = 10.0
 beta=0.005
 J_opt = 0.0
 y_nodes = np.linspace(0.0, Ly, Ny + 1)
@@ -6667,7 +6667,7 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
             kappa_param=None,
             compute_adjoint_grad_kappa_fn=None,
             Lx=Lx, N_KL=N_KL, sigma_d=sigma_d, eps_smooth=eps_smooth,
-            sigma_field=sigma_field, run_fd_check=False, mean_only=False)
+            sigma_field=sigma_field, run_fd_check=False, mean_only=True)
 
         g_log = np.array([
             g_therm_adj.get('rho_vap0', 0.0) * rho0,

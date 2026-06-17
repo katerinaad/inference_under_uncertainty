@@ -206,7 +206,9 @@ def depth_adjoint_seed(U_t, h_obs_t, sigma2_obs_t, Nx, Ny, Ly, num_nodes, P,
         r_mu = (h_u0 - float(h_obs_t))
         # J_mu = 0.5 * r_mu^2 / sigma_d^2 => dJ/du0 = r_mu/sigma_d^2 * dh/du0
         # and dh/du0 = -g_flat (because surf = ytop - H@wz)
-        lam[:num_nodes] += -(r_mu) * g_flat / max(1e-20, float(sigma2_obs_t))
+        _sigma2_floor = (sigma_d**2) if (sigma_d is not None) else 1e-6
+        _sigma2_norm = max(_sigma2_floor, float(sigma2_obs_t))
+        lam[:num_nodes] += -(r_mu) * g_flat / _sigma2_norm
 
     # --- variance term ---
     U_modes = U_t.reshape(P, num_nodes)
@@ -291,8 +293,7 @@ def run_adjoint_depth(U_obs,
     sigma_d : depth observation noise std dev (m)
     """
     if (theta_kappa is not None
-            and 'rho_melt1_s' in melt_prop and 'rho_melt1_d' in melt_prop
-            and 'rho_melt1' not in melt_prop):
+            and 'rho_melt1_s' in melt_prop and 'rho_melt1_d' in melt_prop):
         from inf_layered_vap_exp import _sigmoid_rho_field
         tk = np.asarray(theta_kappa, float)
         melt_prop = {**melt_prop,
@@ -344,7 +345,8 @@ def run_adjoint_depth(U_obs,
             stage_seed = depth_adjoint_seed(
                 U_hist[n], h_obs_hist[n], sigma2_obs_hist[n],
                 Nx, Ny, Ly, num_nodes, P,
-                T_abl, eps, beta, bc_idx, evap_range, mean_only=mean_only
+                T_abl, eps, beta, bc_idx, evap_range, mean_only=mean_only,
+                sigma_d=sigma_d,
             )
             lam_n = lam_n + stage_seed
             # lam_n = lam_n + stage_seed
@@ -375,11 +377,11 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
                                sigma2_obs_hist,
                                spatial_op,
                                h_obs_hist,  # required: observed depth history
-                               eps_smooth=30.0,
+                               eps_smooth=10.0,
                                beta=None,
                                evap_range=0.0,
                                sigma_d=None,
-                               eps_fd=5e-4,
+                               eps_fd=5e-5,
                                verbose=True,
                                # kappa gradient: pass these from the call site in inf_layered_vap.py
                                kappa_param=None,           # LayeredKappa / SmoothKappa instance
@@ -394,6 +396,14 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
 
     U0_clean = U0.copy()  # <-- save this
     y_nodes = np.linspace(0.0, Ly, Ny + 1)
+
+    # Rebuild rho_melt1 from sigmoid — must match what run_forward does internally
+    if (theta_kappa is not None
+            and 'rho_melt1_s' in melt_prop and 'rho_melt1_d' in melt_prop):
+        from inf_layered_vap_exp import _sigmoid_rho_field
+        tk = np.asarray(theta_kappa, float)
+        melt_prop = {**melt_prop,
+                     'rho_melt1': _sigmoid_rho_field(melt_prop, float(tk[2]), float(tk[3]))}
 
     # 1. Base forward solve
     result0 = run_forward_fn(U0_clean, solid_prop, melt_prop, vap_prop, ell,
@@ -419,8 +429,10 @@ def validate_depth_adjoint_fd(dx, dy, U_obs_passed,
             g_flat = (w_softmin[:, np.newaxis] * wz[np.newaxis, :] * dH).ravel()
 
             r_mu = h_u0 - float(h_obs_hist[t])
-            if mean_only ==True:    
-                J += 0.5 * r_mu**2 / max(1e-20, sigma2_obs_hist[t])
+            if mean_only ==True:
+                _sigma2_floor = (sigma_d**2) if (sigma_d is not None) else 1e-6
+                _sigma2_norm = max(_sigma2_floor, sigma2_obs_hist[t])
+                J += 0.5 * r_mu**2 / _sigma2_norm
             mean_meas[t] = float(h_u0)
             U_modes = u_t.reshape(P, num_nodes)
             g_dot_uk = U_modes[1:] @ g_flat  # (P-1,)

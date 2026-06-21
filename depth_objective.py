@@ -41,6 +41,7 @@ def softmin_depth(u_mean_2d, y_nodes, T_abl, eps, beta, evap_range=0.0):
     wz = _trap_weights(y_nodes)
     ytop = float(y_nodes[-1])
     #beta=0.005
+    eps=30.0
     evap_range = 0
     beta = 0.005
     phi = u_mean_2d - T_abl - evap_range

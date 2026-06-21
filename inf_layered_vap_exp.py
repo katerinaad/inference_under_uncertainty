@@ -1,8 +1,8 @@
-import numpy as np
-import math
 import warnings
-warnings.filterwarnings("ignore", category=RuntimeWarning)
-warnings.filterwarnings("ignore", category=Warning, module="scipy")
+warnings.filterwarnings("ignore")
+import numpy as np
+np.seterr(all="ignore")
+import math
 import matplotlib.pyplot as plt
 from scipy.fft import fft2, ifft2, fftfreq
 from scipy.sparse import lil_matrix, csr_matrix, kron, identity
@@ -46,7 +46,7 @@ def rss_mb():
 # Domain & FE Mesh Parameters (2D physical space)
 # ------------------------------
 Lx, Ly = 0.21, 0.21
-Nx, Ny = 40,40
+Nx, Ny = 45,45
 k0= 1.0       # baseline conductivity
 k1 = 0.2 # scaling for fluctuations
 m0 = 1e6
@@ -56,9 +56,9 @@ f1 = 0.0
 rhoL = 0
 #rho_vap0 = 1e9    # latent heat of vaporisation (J/m^3); set >0 to activate vapour transition
 #rho_vap1 = 1e7
-T_final = 5.0
+T_final = 15.0
 dt = 0.075
-N_KL = 40 # number of KL terms
+N_KL = 45 # number of KL terms
 P = N_KL + 1     # total chaos modes (0th = mean, 1...N_KL = KL terms)
 dx, dy = Lx/Nx, Ly/Ny
 num_obs =10
@@ -78,7 +78,7 @@ kappa_param_obs = SigmoidLayeredKappa(
     kappa_surface=200.0,    # short correlation near surface (weathered/fractured)
     kappa_deep=100.0,       # longer correlation at depth (competent granite)
     y_transition=0.9*Ly,   # transition at 60% depth
-    width=0.1*Ly,          # transition zone ~10% of domain width
+    width=0.01*Ly,          # transition zone ~10% of domain width
     )
 kappa_param_init = SigmoidLayeredKappa(
     Ny=Ny,
@@ -86,10 +86,10 @@ kappa_param_init = SigmoidLayeredKappa(
     kappa_surface=180.0,    # short correlation near surface (weathered/fractured)
     kappa_deep=150.0,       # longer correlation at depth (competent granite)
     y_transition=0.95*Ly,   # transition at 60% depth
-    width=0.1*Ly,          # transition zone ~10% of domain width
+    width=0.01*Ly,          # transition zone ~10% of domain width
     )
-theta_kappa_init = np.array([180.0,150.0, 0.95*Ly,0.1*Ly])
-theta_kappa_obs = np.array([200.0,100.0, 0.9*Ly,0.1*Ly])
+theta_kappa_init = np.array([180.0,150.0, 0.95*Ly,0.01*Ly])
+theta_kappa_obs = np.array([200.0,100.0, 0.9*Ly,0.01*Ly])
 np.random.seed(0)
 #Generate GMRF  and assemble SG matrices
 # Generate the GMRF
@@ -108,8 +108,8 @@ T_melt_hi =1573.0
 Delta_melt = 150.0   # smoothing width
 
 # ---- solid / melt parameter sets ----
-SOLID =dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*100, f0=1.0, f1=0.0)
-MELT  =  dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*100, f0=0.8, f1=0.0,
+SOLID =dict(k0=2.0,  k1=0.2, m0=2650 * 1050, m1= 2650*100, f0=1.0, f1=0.0)
+MELT  =  dict(k0=2.0,  k1=0.2, m0=2650 * 1050, m1= 2650*100, f0=0.8, f1=0.0,
              rho_melt0=1.5e9, rho_melt1=1.5e8,
              rho_melt1_s=3.0e8, rho_melt1_d=3.0e8)
 #SOLID_obs = dict(k0=2.0,  k1=0.0, m0=2.3e6, m1=2e5, f0=1.0, f1=0.0)
@@ -119,7 +119,7 @@ MELT  =  dict(k0=2.0,  k1=2.0, m0=2650 * 1050, m1= 2650*100, f0=0.8, f1=0.0,
 
 SOLID_obs = dict(
     k0  = 2.0,              # W/(m·K) — Gokhale Table 1
-    k1  = 0.0,
+    k1  = 0.2,
     m0  = 2650 * 1050,      # 2.7825e6 J/(m³·K) — rho*Cp solid
     m1  = 2650*100,
     f0  = 1.0,             # 0.75 * 0.83 — transmissivity * absorptivity correction
@@ -128,13 +128,13 @@ SOLID_obs = dict(
 
 MELT_obs = dict(
     k0  = 2.0,              # W/(m·K) — same as solid in Gokhale Table 1
-    k1  = 0.0,
+    k1  = 0.2,
     m0  = 2650 * 1050,      # 4.1605e6 J/(m³·K) — rho*Cp melt
     m1  = 2650 * 100,
-    f0  = 0.6,             # same absorptivity correction as solid
+    f0  = 0.8,             # same absorptivity correction as solid
     f1  = 0.0, rho_melt0=1.5e9, rho_melt1=0.0,  # rho_melt1 overwritten below
-    rho_melt1_s = 2.5e8,   # surface value for sigmoid field
-    rho_melt1_d = 2.5e8,   # deep value for sigmoid field
+    rho_melt1_s = 1.5e8,   # surface value for sigmoid field
+    rho_melt1_d = 1.5e8,   # deep value for sigmoid field
 )
 
 # ── layered rho_melt1 parametrisation ─────────────────────────────────────────
@@ -161,7 +161,7 @@ MELT_obs["rho_melt1"] = _sigmoid_rho_field(
 # ---- vapour parameter set ----
 VAP = dict(k0=0.26, k1=0.01, m0=2650  * 1570, m1=2650  * 157, f0=0.2, f1=0.0,
     rho_vap0 =  1366400000,
-    rho_vap1 = 1366400000*0 ,)
+    rho_vap1 = 136640000,)
 
 VAP_obs = dict(
     k0      = 0.26,            # W/(m·K) — vapour thermal conductivity
@@ -171,8 +171,8 @@ VAP_obs = dict(
     f0      = 0.2,
     f1      = 0.0,
    # rho_vap0 = 2650 * 1, # 3.621e10 J/m³ — rho_melt * L_v (Gokhale Table 1)414.65414574953286
-    rho_vap0 =  1666400000,
-    rho_vap1 = 136640000*0) 
+    rho_vap0 =  1366400000,
+    rho_vap1 = 136640000) 
 
 theta_lab = [1e8, 80, 35, 0.168, 0.021]   # kappa_surf 80 not 60, kappa_deep 35 not 40
 
@@ -7003,7 +7003,7 @@ validate_depth_adjoint_fd(dx,dy,U_obs,
     spatial_op_obs, h_obs_hist, kappa_param=kappa_param_init,
     compute_adjoint_grad_kappa_fn=compute_adjoint_grad_kappa_phase_matrixfree_all,
     Lx=Lx,
-    N_KL=N_KL, sigma_d = sigma_d, eps_smooth=eps_smooth,sigma_field= sigma_field, mean_only=True)
+    N_KL=N_KL, sigma_d = sigma_d, eps_smooth=eps_smooth,sigma_field= sigma_field, mean_only=False)
 run_inf_lbfgs(skip_stage1=True,
             prior=prior_full)
 mc_on = False

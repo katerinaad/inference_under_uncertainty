@@ -3,6 +3,8 @@ warnings.filterwarnings("ignore")
 import numpy as np
 np.seterr(all="ignore")
 import math
+import os, sys
+_FINE_OBS = os.environ.get("FINE_OBS", "0") == "1"
 import matplotlib.pyplot as plt
 from scipy.fft import fft2, ifft2, fftfreq
 from scipy.sparse import lil_matrix, csr_matrix, kron, identity
@@ -46,7 +48,7 @@ def rss_mb():
 # Domain & FE Mesh Parameters (2D physical space)
 # ------------------------------
 Lx, Ly = 0.21, 0.21
-Nx, Ny = 45,45
+Nx, Ny = (100, 100) if _FINE_OBS else (50, 50)
 k0= 1.0       # baseline conductivity
 k1 = 0.2 # scaling for fluctuations
 m0 = 1e6
@@ -57,8 +59,8 @@ rhoL = 0
 #rho_vap0 = 1e9    # latent heat of vaporisation (J/m^3); set >0 to activate vapour transition
 #rho_vap1 = 1e7
 T_final = 15.0
-dt = 0.075
-N_KL = 45 # number of KL terms
+dt     = 0.0375 if _FINE_OBS else 0.075
+N_KL   = 80 if _FINE_OBS else 45
 P = N_KL + 1     # total chaos modes (0th = mean, 1...N_KL = KL terms)
 dx, dy = Lx/Nx, Ly/Ny
 num_obs =10
@@ -133,8 +135,8 @@ MELT_obs = dict(
     m1  = 2650 * 100,
     f0  = 0.8,             # same absorptivity correction as solid
     f1  = 0.0, rho_melt0=1.5e9, rho_melt1=0.0,  # rho_melt1 overwritten below
-    rho_melt1_s = 1.5e8,   # surface value for sigmoid field
-    rho_melt1_d = 1.5e8,   # deep value for sigmoid field
+    rho_melt1_s = 3.0e8,   # surface value for sigmoid field
+    rho_melt1_d = 3.0e8,   # deep value for sigmoid field
 )
 
 # ── layered rho_melt1 parametrisation ─────────────────────────────────────────
@@ -5464,32 +5466,79 @@ for k in range(1, min(P, 4)):
 y_nodes = np.linspace(0.0, Ly, Ny + 1)
 wz = _trap_weights(y_nodes)
 #J_opt=0
-eps_smooth = 10.0
-beta=0.005
+eps_smooth = 30.0
+beta=0.0005
 J_opt = 0.0
 y_nodes = np.linspace(0.0, Ly, Ny + 1)
 wz = _trap_weights(y_nodes)
 
 
 # observed mean and variance of depth across realisations
-#h_obs_hist      = depth_ensemble[:, :].mean(axis=0)          # (time_steps,)
-#sigma2_obs_hist = depth_ensemble[:, :].var(axis=0, ddof=1)   # (time_steps,)
+_fine_obs_path = "obs_fine.npz"
+if not _FINE_OBS and os.path.exists(_fine_obs_path):
+    _fine = np.load(_fine_obs_path)
+    h_obs_hist_raw      = _fine["h_obs_hist"]
+    sigma2_obs_hist_raw = _fine["sigma2_obs_hist"]
+    _fine_steps = len(h_obs_hist_raw)
+    if _fine_steps == time_steps:
+        h_obs_hist      = h_obs_hist_raw
+        sigma2_obs_hist = sigma2_obs_hist_raw
+    elif _fine_steps % time_steps == 0:
+        # fine dt is an integer multiple of coarse dt — subsample exactly
+        _stride = _fine_steps // time_steps
+        h_obs_hist      = h_obs_hist_raw[::_stride]
+        sigma2_obs_hist = sigma2_obs_hist_raw[::_stride]
+    else:
+        # fallback: linear interpolation onto coarse time grid
+        _t_fine   = np.linspace(0, T_final, _fine_steps)
+        _t_coarse = np.linspace(0, T_final, time_steps)
+        h_obs_hist      = np.interp(_t_coarse, _t_fine, h_obs_hist_raw)
+        sigma2_obs_hist = np.interp(_t_coarse, _t_fine, sigma2_obs_hist_raw)
+    print(f"Loaded fine-mesh obs from {_fine_obs_path}  "
+          f"(Nx={int(_fine['Nx'])}, N_KL={int(_fine['N_KL'])}, "
+          f"fine_steps={_fine_steps} -> coarse_steps={time_steps})")
+else:
+    h_obs_hist      = np.zeros(time_steps)
+    sigma2_obs_hist = np.zeros(time_steps)
+    for t in range(1, time_steps):
+        u_t = U_obs[t]
+        u_mean_2d = u_t[:num_nodes].reshape(Nx+1, Ny+1)
+        h_u0, _, w_softmin, _, dH = softmin_depth(u_mean_2d, y_nodes, T_abl, eps_smooth, beta)
+        g_flat = (w_softmin[:, None] * wz[None, :] * dH).ravel()
+        U_modes = u_t.reshape(P, num_nodes)
+        h_obs_hist[t]      = h_u0
+        sigma2_obs_hist[t] = float(np.sum((U_modes[1:] @ g_flat)**2))
 
-h_obs_hist      = np.zeros(time_steps)
-sigma2_obs_hist = np.zeros(time_steps)
-
-for t in range(1, time_steps):
-    u_t = U_obs[t]
-    u_mean_2d = u_t[:num_nodes].reshape(Nx+1, Ny+1)
-    h_u0, _, w_softmin, _, dH = softmin_depth(u_mean_2d, y_nodes, T_abl, eps_smooth, beta)
-    g_flat = (w_softmin[:, None] * wz[None, :] * dH).ravel()
-    U_modes = u_t.reshape(P, num_nodes)
-    h_obs_hist[t]      = h_u0
-    sigma2_obs_hist[t] = float(np.sum((U_modes[1:] @ g_flat)**2))
-
+_sigma2_analytical = sigma2_obs_hist.copy()
 print("h_obs_hist (analytical):      ", h_obs_hist)
-print("sigma2_obs_hist (analytical): ", sigma2_obs_hist)
-print("CHECK")
+print("sigma2_obs_hist (analytical): ", _sigma2_analytical)
+
+# ── MC-sample override for sigma2_obs_hist ────────────────────────────────────
+N_MC_OBS = int(os.environ.get("MC_OBS", "0"))
+if N_MC_OBS > 0:
+    _mc_rng    = np.random.default_rng(int(os.environ.get("MC_SEED", "0")))
+    _mc_depths = np.zeros((time_steps, N_MC_OBS))
+    print(f"[MC obs] drawing {N_MC_OBS} samples to estimate sigma2_obs_hist ...")
+    for _i in range(N_MC_OBS):
+        _xi = _mc_rng.standard_normal(N_KL)
+        for t in range(1, time_steps):
+            _u_real = sample_solution(U_obs[t], multi_idx, _xi)
+            _u2d    = _u_real.reshape(Nx + 1, Ny + 1)
+            _h, *_  = softmin_depth(_u2d, y_nodes, T_abl, eps_smooth, beta)
+            _mc_depths[t, _i] = _h
+        if (_i + 1) % max(1, N_MC_OBS // 10) == 0:
+            print(f"  sample {_i + 1}/{N_MC_OBS}")
+    sigma2_obs_hist = _mc_depths.var(axis=1, ddof=1)
+    h_obs_hist      = _mc_depths.mean(axis=1)
+    print(f"[MC obs] sigma2_obs_hist (MC, N={N_MC_OBS}):  {sigma2_obs_hist}")
+    print(f"[MC obs] sigma2_obs_hist (analytical):        {_sigma2_analytical}")
+    print(f"[MC obs] relative error: {(sigma2_obs_hist - _sigma2_analytical) / (_sigma2_analytical + 1e-300)}")
+    np.savez("obs_mc.npz",
+             h_obs_hist=h_obs_hist,
+             sigma2_obs_hist=sigma2_obs_hist,
+             sigma2_analytical=_sigma2_analytical,
+             N_MC_OBS=N_MC_OBS)
+    print("[MC obs] saved to obs_mc.npz")
 
 # Save depth PC coefficients for MC sampling studies
 _depth_pc = np.zeros((time_steps, P))
@@ -5507,36 +5556,17 @@ np.savez("depth_pc_coeffs.npz",
          N_KL=N_KL, P=P, time_steps=time_steps)
 print("Saved depth_pc_coeffs.npz")
 
-#T_obs_hist = make_T_obs_history_weighted(U_obs, x_vis_hist, y_vis_hist, w_vis_hist,
-#                                 x, y, sigma_obs, num_obs,
-#                                 multi_idx, eval_psi, N_KL)
+if _FINE_OBS:
+    np.savez("obs_fine.npz",
+             h_obs_hist=h_obs_hist,
+             sigma2_obs_hist=sigma2_obs_hist,
+             Nx=Nx, Ny=Ny, dt=dt, N_KL=N_KL)
+    print("Fine-mesh observations saved to obs_fine.npz. Exiting.")
+    sys.exit(0)
 
-Nt = U_obs.shape[0]
-num_nodes = (Nx + 1) * (Ny + 1)
-
-T_obs = np.zeros((Nt, num_nodes, num_obs))  # (time, node, sample)
-
-rng = np.random.default_rng(0)
-
-for i in range(num_obs):
-    xi_sample = rng.standard_normal(N_KL)
-
-    for t in range(Nt):
-        T_obs[t, :, i] = sample_solution(U_obs[t, :], multi_idx, xi_sample)
-T_obs_mean = T_obs.mean(axis=2)   # (Nt, num_nodes)
-del T_obs
 from depth_objective import run_adjoint_depth, compute_depth_objective_trajectory, validate_depth_adjoint_fd
 from depth_objective import softmin_depth
-import numpy as np
 from depth_objective import _trap_weights
-
-y_nodes = np.linspace(0.0, Ly, Ny + 1)
-h_obs_hist = np.zeros(time_steps)
-for t in range(time_steps):
-    u2d = U_obs[t, :num_nodes].reshape(Nx+1, Ny+1)
-    h_obs_hist[t], _, _, _, _ = softmin_depth(
-        u2d, y_nodes, T_abl, eps=10.0, beta=0.005)
-print("Hobs: ",h_obs_hist)
 
 import copy
 def make_phi_one_step(
@@ -6986,6 +7016,9 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
           f"  kappa={np.exp(x_log_final[2:]).round(2)}"
           f"  J={res2.fun/OBJ_SCALE2:.4e}  {res2.message}")
 
+
+run_inf_lbfgs(skip_stage1=True,
+            prior=prior_full)
 validate_depth_adjoint_fd(dx,dy,U_obs,
     run_forward,
     U0,
@@ -7004,8 +7037,6 @@ validate_depth_adjoint_fd(dx,dy,U_obs,
     compute_adjoint_grad_kappa_fn=compute_adjoint_grad_kappa_phase_matrixfree_all,
     Lx=Lx,
     N_KL=N_KL, sigma_d = sigma_d, eps_smooth=eps_smooth,sigma_field= sigma_field, mean_only=False)
-run_inf_lbfgs(skip_stage1=True,
-            prior=prior_full)
 mc_on = False
 if mc_on == True: 
 

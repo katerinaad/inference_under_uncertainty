@@ -1,0 +1,1406 @@
+/Users/a.adamopoulou/code/stable_eigh_test.py:497: RuntimeWarning: divide by zero encountered in matmul
+  W[:, :, i] = R.T @ dK_Phi         # (N_sum, N_sum)
+/Users/a.adamopoulou/code/stable_eigh_test.py:497: RuntimeWarning: overflow encountered in matmul
+  W[:, :, i] = R.T @ dK_Phi         # (N_sum, N_sum)
+/Users/a.adamopoulou/code/stable_eigh_test.py:497: RuntimeWarning: invalid value encountered in matmul
+  W[:, :, i] = R.T @ dK_Phi         # (N_sum, N_sum)
+/Users/a.adamopoulou/code/stable_eigh_test.py:519: RuntimeWarning: divide by zero encountered in matmul
+  dphi_full[:, :N_ret, i] = phi @ c_i[:, :N_ret]
+/Users/a.adamopoulou/code/stable_eigh_test.py:519: RuntimeWarning: overflow encountered in matmul
+  dphi_full[:, :N_ret, i] = phi @ c_i[:, :N_ret]
+/Users/a.adamopoulou/code/stable_eigh_test.py:519: RuntimeWarning: invalid value encountered in matmul
+  dphi_full[:, :N_ret, i] = phi @ c_i[:, :N_ret]
+/Users/a.adamopoulou/code/inf_layered_vap_exp.py:3374: RuntimeWarning: divide by zero encountered in matmul
+  k_fluct = phi_flat @ coeff                         # (n,)
+/Users/a.adamopoulou/code/inf_layered_vap_exp.py:3374: RuntimeWarning: overflow encountered in matmul
+  k_fluct = phi_flat @ coeff                         # (n,)
+/Users/a.adamopoulou/code/inf_layered_vap_exp.py:3374: RuntimeWarning: invalid value encountered in matmul
+  k_fluct = phi_flat @ coeff                         # (n,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/_index.py:151: SparseEfficiencyWarning: Changing the sparsity structure of a csr_matrix is expensive. lil_matrix is more efficient.
+  self._set_arrayXarray(i, j, x)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: divide by zero encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: overflow encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/code/depth_objective.py:51: RuntimeWarning: invalid value encountered in matmul
+  thickness = H @ wz          # (Nx+1,)
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: divide by zero encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: overflow encountered in matmul
+  x += y @ v[:col+1, :]
+/Users/a.adamopoulou/Library/Python/3.9/lib/python/site-packages/scipy/sparse/linalg/_isolve/iterative.py:842: RuntimeWarning: invalid value encountered in matmul
+  x += y @ v[:col+1, :]

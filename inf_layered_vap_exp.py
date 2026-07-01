@@ -7017,28 +7017,28 @@ def run_inf_lbfgs(mean_round_iters=1, var_round_iters=150, prior=None,
           f"  J={res2.fun/OBJ_SCALE2:.4e}  {res2.message}")
 
 
-run_inf_lbfgs(skip_stage1=True,
-            prior=prior_full)
-validate_depth_adjoint_fd(dx,dy,U_obs,
-    run_forward,
-    U0,
-    SOLID, MELT, VAP,
-    ell, theta_kappa_init,
-    Nx, Ny, Ly, num_nodes, P, T_abl,
-    adjoint_one_step,
-    adjoint_grad_all_phase,
-    forcing_param_grads_numpy,
-    _clear_all_kappa_caches,#
-    bc_idx, params,
-    M_bc, K_bc, solve_A,
-    K_SG_K0, K_SG_K1, M_SG_M0, M_SG_M1,
-    sigma2_obs_hist,
-    spatial_op_obs, h_obs_hist, kappa_param=kappa_param_init,
-    compute_adjoint_grad_kappa_fn=compute_adjoint_grad_kappa_phase_matrixfree_all,
-    Lx=Lx,
-    N_KL=N_KL, sigma_d = sigma_d, eps_smooth=eps_smooth,sigma_field= sigma_field, mean_only=False)
-mc_on = False
-if mc_on == True: 
+if not __import__('sys').argv[1:]:
+    run_inf_lbfgs(skip_stage1=True,
+                prior=prior_full)
+    validate_depth_adjoint_fd(dx,dy,U_obs,
+        run_forward,
+        U0,
+        SOLID, MELT, VAP,
+        ell, theta_kappa_init,
+        Nx, Ny, Ly, num_nodes, P, T_abl,
+        adjoint_one_step,
+        adjoint_grad_all_phase,
+        forcing_param_grads_numpy,
+        _clear_all_kappa_caches,#
+        bc_idx, params,
+        M_bc, K_bc, solve_A,
+        K_SG_K0, K_SG_K1, M_SG_M0, M_SG_M1,
+        sigma2_obs_hist,
+        spatial_op_obs, h_obs_hist, kappa_param=kappa_param_init,
+        compute_adjoint_grad_kappa_fn=compute_adjoint_grad_kappa_phase_matrixfree_all,
+        Lx=Lx,
+        N_KL=N_KL, sigma_d = sigma_d, eps_smooth=eps_smooth,sigma_field= sigma_field, mean_only=False)
+if __import__('sys').argv[1:]:
 
     # ── CLI args for MC ablation study ───────────────────────────────────────────
     import argparse as _ap
@@ -7248,7 +7248,7 @@ def run_rho1_profile(rho_vap0_fixed, f0_m_fixed, n_pts=15):
 #run_inf()
 
 prior_none = None
-result = run_depth_inference(
+if False: result = run_depth_inference(
     # data
     U_obs=U_obs,
     h_obs_hist=h_obs_hist,

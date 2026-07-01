@@ -1,0 +1,39 @@
+Stage 1 Inference Summary
+=========================
+Run date : 2026-05-19
+
+Truth values
+------------
+  rho_vap0 = 1.366400e+09  J/m³
+  f0_v     = 0.2000
+
+Stage 1a  (warm-start: rho_vap0 + f0_v, phase params fixed at obs)
+-------------------------------------------------------------------
+  Starting point : rho_vap0 = 1.2664e+09  f0_v = 0.2000  (f0_v fixed to truth)
+  Bounds         : rho_vap0 ∈ [4e8, 4e9]   f0_v ∈ [0.08, 0.5]
+  Iterations     : 32  function evaluations
+  J start        : 2.1830e+02
+  J final        : 2.4556e-06
+  Converged      : yes  (gtol = 2e-4)
+
+  Final estimates vs truth:
+    rho_vap0 = 1.366400e+09   truth 1.366400e+09   err = 0.0000%
+    f0_v     = 0.200000         truth 0.200000         err = 0.0000%
+
+Stage 1b  (all 10 params: + k0_v, m0_v, k0_m, m0_m, f0_m, k0_s, m0_s, f0_s)
+------------------------------------------------------------------------------
+  Warm start     : from Stage 1a result
+  Status         : INTERRUPTED after 7 evals
+  J start        : 2.4556e-06
+  J at interrupt : 9.0849e-07
+  Phase params   : all stayed at truth (no drift observed before interrupt)
+
+  Iter 2 bounds probe (J = 1.4348e+05)  — correctly rejected, returned to truth
+    rho_vap0 = 4.0e+09  f0_v = 0.50  k0_v = 0.10  m0_v = 1e6  ...  (all at bounds)
+
+Notes
+-----
+- sigma2_obs_hist at early timesteps is O(1e-16), creating large J weights;
+  residual J ~ 1e-6 is numerical noise at this scale, not a real mismatch.
+- f0_s = 1.0 is at the upper bound; gradient info lost there. Consider fixing
+  f0_s = 1.0 in Stage 1 if it becomes an issue in future runs.

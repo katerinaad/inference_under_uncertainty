@@ -1,0 +1,4 @@
+# rho_melt1_surf_truth=3.000000e+08  rho_melt1_deep_truth=3.000000e+08
+# rho_vap0_fixed=1.366400e+09  f0_m_fixed=0.800000
+iter,J,rho_melt1_surf,rho_melt1_deep,kappa_surf,kappa_deep,y_trans,width,g_rms,g_rmd,g_ks,g_kd,g_yt,g_w
+1,8.551970e-08,3.000000e+08,3.000000e+08,1.800000e+02,1.500000e+02,1.995000e-01,2.100000e-03,-5.0851e-09,-1.1634e-08,7.9855e-08,8.1324e-08,3.4954e-07,1.6352e-10
